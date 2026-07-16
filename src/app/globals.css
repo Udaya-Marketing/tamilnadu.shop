@@ -6,11 +6,21 @@
   --card-bg: #ffffff;
   --banner-bg: linear-gradient(135deg, #eef0f3 0%, #e3e6ea 100%);
   --input-bg: #f0f1f5;
-  --accent-purple: #6366f1;
-  --accent-purple-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+
+  /* Royal Blue Theme Colors */
+  --accent: #4169e1;
+  --accent-rgb: 65, 105, 225;
+  --accent-gradient: linear-gradient(135deg, #4169e1 0%, #2b4cbe 100%);
+  --accent-purple: var(--accent);
+  --accent-purple-gradient: var(--accent-gradient);
+
   --like-active: #ff3b30;
 
-
+  /* Global Base Colors */
+  --white: #ffffff;
+  --white-rgb: 255, 255, 255;
+  --black: #000000;
+  --black-rgb: 0, 0, 0;
 
   --font-sans: var(--font-fellix), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -26,8 +36,14 @@
     --card-bg: #1c1c1e;
     --banner-bg: linear-gradient(135deg, #1c1c24 0%, #252535 100%);
     --input-bg: #2c2c2e;
-    --accent-purple: #818cf8;
-    --accent-purple-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+
+    /* Royal Blue Theme Colors */
+    --accent: #5c85ff;
+    --accent-rgb: 92, 133, 255;
+    --accent-gradient: linear-gradient(135deg, #5c85ff 0%, #4169e1 100%);
+    --accent-purple: var(--accent);
+    --accent-purple-gradient: var(--accent-gradient);
+
     --like-active: #ff453a;
   }
 }
@@ -41,8 +57,13 @@ html[data-theme="light"] {
   --card-bg: #ffffff;
   --banner-bg: linear-gradient(135deg, #eef0f3 0%, #e3e6ea 100%);
   --input-bg: #f0f1f5;
-  --accent-purple: #6366f1;
-  --accent-purple-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+
+  --accent: #4169e1;
+  --accent-rgb: 65, 105, 225;
+  --accent-gradient: linear-gradient(135deg, #4169e1 0%, #2b4cbe 100%);
+  --accent-purple: var(--accent);
+  --accent-purple-gradient: var(--accent-gradient);
+
   --like-active: #ff3b30;
 }
 
@@ -54,8 +75,13 @@ html[data-theme="dark"] {
   --card-bg: #1c1c1e;
   --banner-bg: linear-gradient(135deg, #1c1c24 0%, #252535 100%);
   --input-bg: #2c2c2e;
-  --accent-purple: #818cf8;
-  --accent-purple-gradient: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+
+  --accent: #5c85ff;
+  --accent-rgb: 92, 133, 255;
+  --accent-gradient: linear-gradient(135deg, #5c85ff 0%, #4169e1 100%);
+  --accent-purple: var(--accent);
+  --accent-purple-gradient: var(--accent-gradient);
+
   --like-active: #ff453a;
 }
 

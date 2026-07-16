@@ -22,8 +22,8 @@
   height: 42px;
   border-radius: 50%;
   background-color: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
+  box-shadow: 0 2px 8px rgba(var(--black-rgb), 0.04);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
@@ -49,7 +49,7 @@
 
 @media (prefers-color-scheme: dark) {
   .iconButton {
-    border-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(var(--white-rgb), 0.03);
   }
 }
 
@@ -61,7 +61,7 @@
   height: 16px;
   padding: 0 4px;
   background-color: var(--like-active);
-  color: #ffffff;
+  color: var(--white);
   border-radius: 8px;
   font-size: 9px;
   font-weight: 800;

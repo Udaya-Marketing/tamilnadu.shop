@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(var(--black-rgb), 0.4);
   z-index: 900;
   opacity: 0;
   pointer-events: none;
@@ -25,7 +25,7 @@
   max-width: 100%;
   height: 100vh;
   background-color: var(--background);
-  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.08);
+  box-shadow: -6px 0 24px rgba(var(--black-rgb), 0.08);
   z-index: 1000;
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -42,7 +42,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(var(--black-rgb), 0.04);
 }
 
 .closeButton {
@@ -128,9 +128,9 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background-color: var(--white);
+  border: 1px solid rgba(var(--black-rgb), 0.05);
+  box-shadow: 0 2px 6px rgba(var(--black-rgb), 0.08);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -200,7 +200,7 @@
   background-color: var(--card-bg);
   padding: 4px 6px;
   border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.02);
 }
 
 .qtyBtn {
@@ -210,11 +210,11 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--white);
   color: var(--text-primary);
   cursor: pointer;
   transition: transform 0.15s ease;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.02);
 }
 
 .qtyBtn:active {
@@ -241,7 +241,7 @@
   height: 40px;
   border-radius: 20px;
   background-color: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
   padding: 0 16px;
   font-size: 12px;
   color: var(--text-primary);
@@ -273,7 +273,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  border-top: 1px solid rgba(var(--black-rgb), 0.04);
   padding-top: 18px;
   margin-bottom: 24px;
 }
@@ -391,7 +391,7 @@
 
 .otherAddressesSection {
   background-color: var(--input-bg);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.02);
   border-radius: 14px;
   padding: 14px;
   margin-top: 10px;
@@ -420,8 +420,8 @@
   width: 100%;
   height: 34px;
   border-radius: 17px;
-  border: 1.5px dashed rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+  border: 1.5px dashed rgba(var(--black-rgb), 0.08);
+  background-color: var(--white);
   color: var(--text-primary);
   font-size: 11px;
   font-weight: 750;
@@ -433,19 +433,19 @@
 }
 
 .manageAddressBtnInline:hover {
-  background-color: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(var(--black-rgb), 0.02);
+  border-color: rgba(var(--black-rgb), 0.15);
 }
 
 .selectedAddressCard {
   background-color: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.02);
   border-radius: 14px;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+  box-shadow: 0 4px 12px rgba(var(--black-rgb), 0.01);
 }
 
 .selectedHeader {
@@ -504,12 +504,12 @@
 }
 
 .selectorCard:hover {
-  border-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(var(--black-rgb), 0.04);
 }
 
 .selectorCardActive {
   border-color: var(--foreground);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 12px rgba(var(--black-rgb), 0.02);
 }
 
 .selectorHeader {
@@ -539,7 +539,7 @@
 
 .noAddressBox {
   background-color: var(--card-bg);
-  border: 1px dashed rgba(0, 0, 0, 0.08);
+  border: 1px dashed rgba(var(--black-rgb), 0.08);
   border-radius: 14px;
   padding: 16px;
   text-align: center;
@@ -583,17 +583,17 @@
   .closeButton,
   .removeButton,
   .qtyBtn {
-    background-color: #1c1c24;
-    border-color: rgba(255, 255, 255, 0.03);
+    background-color: var(--card-bg);
+    border-color: rgba(var(--white-rgb), 0.03);
   }
   .closeIcon {
     color: var(--text-primary);
   }
   .manageAddressBtnInline {
     background-color: var(--background) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(var(--white-rgb), 0.08) !important;
   }
   .manageAddressBtnInline:hover {
-    background-color: rgba(255, 255, 255, 0.03) !important;
+    background-color: rgba(var(--white-rgb), 0.03) !important;
   }
 }

@@ -9,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 0 16px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(var(--black-rgb), 0.02);
   margin-bottom: 24px;
 }
 
@@ -113,10 +113,10 @@
     background-color: #1e1e22;
   }
   .backButton:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(var(--white-rgb), 0.05);
   }
   .iconCircle {
     background-color: #1e1e22;
-    border-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(var(--white-rgb), 0.05);
   }
 }

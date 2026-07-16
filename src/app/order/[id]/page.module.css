@@ -15,8 +15,8 @@
   height: 42px;
   border-radius: 50%;
   background-color: var(--card-bg);
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
+  box-shadow: 0 2px 8px rgba(var(--black-rgb), 0.04);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
@@ -59,8 +59,8 @@
   background-color: var(--card-bg);
   padding: 20px;
   border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.02);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.02);
+  box-shadow: 0 4px 14px rgba(var(--black-rgb), 0.02);
 }
 
 .cardHeader {
@@ -68,7 +68,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(var(--black-rgb), 0.03);
   padding-bottom: 12px;
 }
 
@@ -136,40 +136,40 @@
 }
 
 .circleCompleted {
-  background-color: #22c55e;
-  color: #ffffff;
+  background-color: var(--success);
+  color: var(--white);
 }
 
 .circleActive {
-  border-color: #6366f1;
-  background-color: #ffffff;
-  color: #6366f1;
+  border-color: var(--accent);
+  background-color: var(--white);
+  color: var(--accent);
 }
 
 .innerDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #6366f1;
+  background-color: var(--accent);
 }
 
 .circlePending {
-  border-color: rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+  border-color: rgba(var(--black-rgb), 0.08);
+  background-color: var(--white);
 }
 
 .line {
   width: 2px;
   height: 38px;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(var(--black-rgb), 0.05);
 }
 
 .lineCompleted {
-  background-color: #22c55e;
+  background-color: var(--success);
 }
 
 .linePending {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(var(--black-rgb), 0.05);
 }
 
 .stepMeta {
@@ -186,7 +186,7 @@
 }
 
 .titleActive {
-  color: #6366f1;
+  color: var(--accent);
   font-weight: 750;
 }
 
@@ -213,8 +213,8 @@
   height: 50px;
   border-radius: 12px;
   overflow: hidden;
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  background-color: var(--white);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
   position: relative;
   flex-shrink: 0;
 }
@@ -320,7 +320,7 @@
 }
 
 .totalRow {
-  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(var(--black-rgb), 0.03);
   padding-top: 12px;
   margin-top: 4px;
 }
@@ -360,18 +360,18 @@
   .circlePending,
   .itemImageWrapper {
     background-color: var(--background);
-    border-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(var(--white-rgb), 0.03);
   }
   .circleActive {
     background-color: var(--background);
   }
   .line {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(var(--white-rgb), 0.05);
   }
   .linePending {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(var(--white-rgb), 0.05);
   }
   .card {
-    border-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(var(--white-rgb), 0.03);
   }
 }

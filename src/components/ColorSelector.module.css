@@ -9,8 +9,8 @@
   height: 22px;
   border-radius: 50%;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(var(--black-rgb), 0.08);
+  box-shadow: 0 1px 4px rgba(var(--black-rgb), 0.04);
 }
 
 .colorSwatch:hover {
@@ -30,6 +30,6 @@
 
 @media (prefers-color-scheme: dark) {
   .colorSwatch {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(var(--white-rgb), 0.1);
   }
 }

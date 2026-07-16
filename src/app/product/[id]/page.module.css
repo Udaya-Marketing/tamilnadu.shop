@@ -23,8 +23,8 @@
   background-color: var(--card-bg);
   border-radius: 36px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 20px rgba(var(--black-rgb), 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
 }
 
 .productImage {
@@ -136,7 +136,7 @@
   color: var(--background);
   font-size: 15px;
   font-weight: 700;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(var(--black-rgb), 0.08);
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 

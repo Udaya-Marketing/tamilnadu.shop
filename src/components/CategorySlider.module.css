@@ -35,7 +35,7 @@
   font-weight: 600;
   white-space: nowrap;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(var(--black-rgb), 0.02);
 }
 
 .emojiCircle {
@@ -45,7 +45,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--white);
   font-size: 15px;
   transition: transform 0.25s ease;
 }
@@ -57,14 +57,14 @@
 }
 
 .activePill .emojiCircle {
-  background-color: #ffffff;
+  background-color: var(--white);
   transform: scale(1.05);
 }
 
 .inactivePill {
   background-color: var(--card-bg);
   color: var(--text-primary);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
 }
 
 .inactivePill .emojiCircle {
@@ -81,9 +81,9 @@
 
 @media (prefers-color-scheme: dark) {
   .activePill {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
+    background-color: var(--white);
+    color: var(--black);
+    border-color: var(--white);
   }
   
   .activePill .emojiCircle {
@@ -91,6 +91,6 @@
   }
   
   .inactivePill {
-    border-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(var(--white-rgb), 0.03);
   }
 }
