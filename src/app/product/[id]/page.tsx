@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Star } from "lucide-react";
 import ProductDetailsHeader from "@/components/ProductDetailsHeader";
 import SizeSelector from "@/components/SizeSelector";
-import ColorSelector from "@/components/ColorSelector";
 import FavoriteButton from "@/components/FavoriteButton";
 import DetailsAddToCart from "@/components/DetailsAddToCart";
 import { PRODUCTS } from "@/data/products";
@@ -76,15 +75,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </span>
           </div>
 
-          {/* Size & Color Swatches */}
+          {/* Weight Options */}
           <div className={styles.optionsRow}>
             <div className={styles.optionSection}>
-              <h4 className={styles.optionLabel}>Size</h4>
+              <h4 className={styles.optionLabel}>Weight</h4>
               <SizeSelector sizes={product.sizes} />
-            </div>
-            <div className={styles.optionSection}>
-              <h4 className={styles.optionLabel}>Color</h4>
-              <ColorSelector colors={product.colors} />
             </div>
           </div>
 

@@ -11,13 +11,13 @@ import styles from "./page.module.css";
 
 const CATEGORIES = [
   { id: "all", name: "All", emoji: "🛍️" },
-  { id: "hoodie", name: "Hoodies", emoji: "🧥" },
-  { id: "sneaker", name: "Sneakers", emoji: "👟" },
-  { id: "face-cap", name: "Face Caps", emoji: "🧢" },
-  { id: "watch", name: "Watches", emoji: "⌚" },
+  { id: "honey", name: "Honey", emoji: "🍯" },
+  { id: "dry-fish", name: "Dry Fish", emoji: "🐟" },
+  { id: "meat", name: "Dry Meat", emoji: "🥩" },
+  { id: "traditional", name: "Traditional", emoji: "🌿" },
 ];
 
-const SIZES = ["All", "S", "M", "L", "XL", "XXL"];
+const SIZES = ["All", "100g", "250g", "500g", "1kg"];
 
 const PRICE_RANGES = [
   { id: "all", label: "All Prices" },

@@ -11,16 +11,15 @@ interface Category {
 }
 
 const CATEGORIES: Category[] = [
-  { id: "hoodie", name: "Hoodie", emoji: "🧥" },
-  { id: "sneaker", name: "Sneaker", emoji: "👟" },
-  { id: "face-cap", name: "Face Cap", emoji: "🧢" },
-  { id: "t-shirt", name: "T-Shirt", emoji: "👕" },
-  { id: "watch", name: "Watch", emoji: "⌚" },
+  { id: "honey", name: "Honey", emoji: "🍯" },
+  { id: "dry-fish", name: "Dry Fish", emoji: "🐟" },
+  { id: "meat", name: "Dry Meat", emoji: "🥩" },
+  { id: "traditional", name: "Traditional", emoji: "🌿" },
 ];
 
 export default function CategorySlider() {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("hoodie");
+  const [activeCategory, setActiveCategory] = useState("honey");
 
   const handleCategoryClick = (id: string) => {
     setActiveCategory(id);

@@ -21,7 +21,7 @@ const COUPONS_DATA: Coupon[] = [
     code: "SAVE10",
     value: "10%",
     title: "Sitewide Discount",
-    description: "Get 10% off your entire order. Valid on all hoodies and active sneakers.",
+    description: "Get 10% off your entire order. Valid on all traditional foods, honey, and dry fish.",
     expiry: "Expires July 20, 2026",
   },
   {

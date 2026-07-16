@@ -47,9 +47,9 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     date: "July 10, 2026",
     time: "03:24 PM",
     status: "In Transit",
-    subtotal: "$250.00",
+    subtotal: "$23.00",
     shipping: "$5.00",
-    total: "$255.00",
+    total: "$28.00",
     address: {
       name: "Asha Royden",
       street: "124 Baker Street",
@@ -69,17 +69,17 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     ],
     items: [
       {
-        name: "Midnight Bloom Hoodie",
-        price: "$120.00",
-        image: "/images/product-green.png",
-        size: "XXL",
+        name: "Home box honey",
+        price: "$15.00",
+        image: "/images/home_box_honey.png",
+        size: "500g",
         quantity: 1,
       },
       {
-        name: "Prestige Canvas Caps",
-        price: "$30.00",
-        image: "/images/product-white.png",
-        size: "M",
+        name: "old tamarind",
+        price: "$8.00",
+        image: "/images/old_tamarind.png",
+        size: "500g",
         quantity: 1,
       },
     ],
@@ -89,9 +89,9 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     date: "July 02, 2026",
     time: "11:15 AM",
     status: "Delivered",
-    subtotal: "$130.00",
+    subtotal: "$40.00",
     shipping: "$5.00",
-    total: "$135.00",
+    total: "$45.00",
     address: {
       name: "Asha Royden",
       street: "124 Baker Street",
@@ -111,10 +111,10 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     ],
     items: [
       {
-        name: "Crimson Wave Hoodie",
-        price: "$120.00",
-        image: "/images/product-blue.png",
-        size: "XXL",
+        name: "Uppukandam beef",
+        price: "$40.00",
+        image: "/images/uppukandam_beef.png",
+        size: "250g",
         quantity: 1,
       },
     ],
@@ -124,9 +124,9 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     date: "June 15, 2026",
     time: "06:40 PM",
     status: "Cancelled",
-    subtotal: "$120.00",
+    subtotal: "$6.00",
     shipping: "$0.00",
-    total: "$120.00",
+    total: "$6.00",
     address: {
       name: "Asha Royden",
       street: "124 Baker Street",
@@ -143,10 +143,10 @@ const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
     ],
     items: [
       {
-        name: "Forest Green Hoodie",
-        price: "$120.00",
-        image: "/images/product-white.png",
-        size: "L",
+        name: "seemai nellikai",
+        price: "$6.00",
+        image: "/images/seemai_nellikai.png",
+        size: "250g",
         quantity: 1,
       },
     ],
@@ -256,7 +256,7 @@ export default function OrderDetailsPage({ params }: PageProps) {
                     <div className={styles.itemMeta}>
                       <h4 className={styles.itemName}>{item.name}</h4>
                       <span className={styles.itemSpecs}>
-                        Size: {item.size} • Qty: {item.quantity}
+                        Weight: {item.size} • Qty: {item.quantity}
                       </span>
                     </div>
                     <span className={styles.itemPrice}>{item.price}</span>

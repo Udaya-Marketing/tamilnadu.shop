@@ -18,7 +18,7 @@ export default function ExploreProductsPage() {
 
   return (
     <MobileContainer>
-      <ProductDetailsHeader title="Explore all Hoodies" />
+      <ProductDetailsHeader title="Explore Products" />
       
       <main className={styles.mainContent}>
         {/* Full-width Search Input */}

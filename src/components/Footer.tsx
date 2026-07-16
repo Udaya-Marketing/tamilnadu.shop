@@ -13,7 +13,7 @@ export default function Footer() {
           <div className={styles.logoBadge}>G</div>
           <h4 className={styles.brandTitle}>Gubera Shop</h4>
           <p className={styles.tagline}>
-            Premium streetwear & hoodies tailored for everyday elegance and minimal aesthetics.
+            Premium organic honey, dry fish varieties, traditional foods and spices.
           </p>
         </div>
 
@@ -28,7 +28,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/products-v2" className={styles.link}>
-                All Hoodies
+                Explore Products
               </Link>
             </li>
             <li>
@@ -85,7 +85,7 @@ export default function Footer() {
             <li>
               <span className={styles.contactLabel}>Store Address:</span>
               <span className={styles.contactValue}>
-                123 Fashion Blvd, Suite 100, New York, NY 10001
+                12 Traditional Street, Madurai, Tamil Nadu, India
               </span>
             </li>
           </ul>

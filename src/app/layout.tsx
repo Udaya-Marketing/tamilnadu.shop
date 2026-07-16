@@ -4,6 +4,7 @@ import { CartProvider } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
 import LoginModal from "@/components/LoginModal";
 import Footer from "@/components/Footer";
+import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 
 const fellix = localFont({
@@ -53,8 +54,8 @@ const fellix = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Explore all Hoodies Storefront",
-  description: "Explore attractive discount sales for premium hoodies.",
+  title: "Gubera Traditional Foods Storefront",
+  description: "Explore premium wild honey, sun-dried fish varieties, uppukandam meats, and organic sweeteners.",
 };
 
 export default function RootLayout({
@@ -66,6 +67,7 @@ export default function RootLayout({
     <html lang="en" className={fellix.variable}>
       <body>
         <CartProvider>
+          <ThemeProvider />
           {children}
           <CartSidebar />
           <LoginModal />

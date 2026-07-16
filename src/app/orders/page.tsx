@@ -31,22 +31,22 @@ const ORDERS: OrderData[] = [
     id: "ORD-984310",
     date: "July 10, 2026",
     status: "In Transit",
-    total: "$255.00",
+    total: "$23.00",
     statusMessage: "Departed sorting facility, in transit to hub",
     actionText: "Track Order",
     items: [
       {
-        name: "Midnight Bloom Hoodie",
-        price: "$120.00",
-        image: "/images/product-green.png",
-        size: "XXL",
+        name: "Home box honey",
+        price: "$15.00",
+        image: "/images/home_box_honey.png",
+        size: "500g",
         quantity: 1,
       },
       {
-        name: "Prestige Canvas Caps",
-        price: "$30.00",
-        image: "/images/product-white.png",
-        size: "M",
+        name: "old tamarind",
+        price: "$8.00",
+        image: "/images/old_tamarind.png",
+        size: "500g",
         quantity: 1,
       },
     ],
@@ -55,14 +55,14 @@ const ORDERS: OrderData[] = [
     id: "ORD-982405",
     date: "July 02, 2026",
     status: "Delivered",
-    total: "$135.00",
+    total: "$40.00",
     actionText: "Write Review",
     items: [
       {
-        name: "Crimson Wave Hoodie",
-        price: "$120.00",
-        image: "/images/product-blue.png",
-        size: "XXL",
+        name: "Uppukandam beef",
+        price: "$40.00",
+        image: "/images/uppukandam_beef.png",
+        size: "250g",
         quantity: 1,
       },
     ],
@@ -71,14 +71,14 @@ const ORDERS: OrderData[] = [
     id: "ORD-979920",
     date: "June 15, 2026",
     status: "Cancelled",
-    total: "$120.00",
+    total: "$6.00",
     actionText: "Contact Support",
     items: [
       {
-        name: "Forest Green Hoodie",
-        price: "$120.00",
-        image: "/images/product-white.png",
-        size: "L",
+        name: "seemai nellikai",
+        price: "$6.00",
+        image: "/images/seemai_nellikai.png",
+        size: "250g",
         quantity: 1,
       },
     ],
@@ -175,7 +175,7 @@ export default function MyOrdersPage() {
                       <div className={styles.itemMeta}>
                         <h4 className={styles.itemName}>{item.name}</h4>
                         <span className={styles.itemSpecs}>
-                          Size: {item.size} • Qty: {item.quantity}
+                          Weight: {item.size} • Qty: {item.quantity}
                         </span>
                       </div>
                       <span className={styles.itemPrice}>{item.price}</span>
