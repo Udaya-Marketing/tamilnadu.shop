@@ -95,8 +95,8 @@ export default function ProfilePage() {
             <p className={styles.loggedOutText}>
               Track your orders, manage shipping addresses, and use exclusive coupons.
             </p>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.loginBtn}
               onClick={() => setLoginModalOpen(true)}
             >
@@ -112,7 +112,7 @@ export default function ProfilePage() {
               <div className={styles.userCard}>
                 <div className={styles.avatarContainer}>
                   <Image
-                    src={user.avatar || "/images/profile.png"}
+                    src={user.avatar}
                     alt={`${user.name} Profile`}
                     width={96}
                     height={96}
@@ -128,7 +128,7 @@ export default function ProfilePage() {
               {/* Statistics */}
               <div className={styles.statsRow}>
                 <div className={styles.statBox}>
-                  <span className={styles.statValue}>12</span>
+                  <span className={styles.statValue}>{user.ordersCount ?? 0}</span>
                   <span className={styles.statLabel}>Orders</span>
                 </div>
                 <div className={styles.statBox}>

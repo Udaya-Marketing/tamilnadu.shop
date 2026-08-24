@@ -1,12 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MobileContainer from "@/components/MobileContainer";
 import BottomNav from "@/components/BottomNav";
 import { ChevronLeft, HelpCircle, Check, MapPin, CreditCard } from "lucide-react";
 import styles from "./page.module.css";
+
+interface OrderItem {
+  name: string;
+  price: string;
+  image: string;
+  size: string;
+  quantity: number;
+}
 
 interface OrderDetails {
   id: string;
@@ -32,126 +40,8 @@ interface OrderDetails {
     completed: boolean;
     active?: boolean;
   }[];
-  items: {
-    name: string;
-    price: string;
-    image: string;
-    size: string;
-    quantity: number;
-  }[];
+  items: OrderItem[];
 }
-
-const ORDERS_DETAILS_DB: Record<string, OrderDetails> = {
-  "ORD-984310": {
-    id: "ORD-984310",
-    date: "July 10, 2026",
-    time: "03:24 PM",
-    status: "In Transit",
-    subtotal: "$23.00",
-    shipping: "$5.00",
-    total: "$28.00",
-    address: {
-      name: "Asha Royden",
-      street: "124 Baker Street",
-      cityState: "London, NW1 6XE, UK",
-      phone: "+44 20 7946 0958",
-    },
-    payment: {
-      type: "Visa",
-      cardNo: "•••• 4242",
-    },
-    steps: [
-      { title: "Order Placed", time: "July 10, 03:24 PM", completed: true },
-      { title: "Payment Confirmed", time: "July 10, 03:26 PM", completed: true },
-      { title: "Processed & Packed", time: "July 10, 06:10 PM", completed: true },
-      { title: "In Transit", time: "July 11, 09:00 AM", completed: true, active: true },
-      { title: "Delivered", completed: false },
-    ],
-    items: [
-      {
-        name: "Home box honey",
-        price: "$15.00",
-        image: "/images/home_box_honey.png",
-        size: "500g",
-        quantity: 1,
-      },
-      {
-        name: "old tamarind",
-        price: "$8.00",
-        image: "/images/old_tamarind.png",
-        size: "500g",
-        quantity: 1,
-      },
-    ],
-  },
-  "ORD-982405": {
-    id: "ORD-982405",
-    date: "July 02, 2026",
-    time: "11:15 AM",
-    status: "Delivered",
-    subtotal: "$40.00",
-    shipping: "$5.00",
-    total: "$45.00",
-    address: {
-      name: "Asha Royden",
-      street: "124 Baker Street",
-      cityState: "London, NW1 6XE, UK",
-      phone: "+44 20 7946 0958",
-    },
-    payment: {
-      type: "Visa",
-      cardNo: "•••• 4242",
-    },
-    steps: [
-      { title: "Order Placed", time: "July 02, 11:15 AM", completed: true },
-      { title: "Payment Confirmed", time: "July 02, 11:18 AM", completed: true },
-      { title: "Processed & Packed", time: "July 02, 02:40 PM", completed: true },
-      { title: "Shipped out", time: "July 03, 10:00 AM", completed: true },
-      { title: "Delivered", time: "July 05, 04:12 PM", completed: true, active: true },
-    ],
-    items: [
-      {
-        name: "Uppukandam beef",
-        price: "$40.00",
-        image: "/images/uppukandam_beef.png",
-        size: "250g",
-        quantity: 1,
-      },
-    ],
-  },
-  "ORD-979920": {
-    id: "ORD-979920",
-    date: "June 15, 2026",
-    time: "06:40 PM",
-    status: "Cancelled",
-    subtotal: "$6.00",
-    shipping: "$0.00",
-    total: "$6.00",
-    address: {
-      name: "Asha Royden",
-      street: "124 Baker Street",
-      cityState: "London, NW1 6XE, UK",
-      phone: "+44 20 7946 0958",
-    },
-    payment: {
-      type: "Visa",
-      cardNo: "•••• 4242",
-    },
-    steps: [
-      { title: "Order Placed", time: "June 15, 06:40 PM", completed: true },
-      { title: "Cancelled", time: "June 15, 07:10 PM", completed: true, active: true },
-    ],
-    items: [
-      {
-        name: "seemai nellikai",
-        price: "$6.00",
-        image: "/images/seemai_nellikai.png",
-        size: "250g",
-        quantity: 1,
-      },
-    ],
-  },
-};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -160,9 +50,133 @@ interface PageProps {
 export default function OrderDetailsPage({ params }: PageProps) {
   const router = useRouter();
   const resolvedParams = React.use(params);
-  const id = resolvedParams.id;
+  const orderId = resolvedParams.id;
 
-  const order = ORDERS_DETAILS_DB[id] || ORDERS_DETAILS_DB["ORD-984310"];
+  const [order, setOrder] = useState<OrderDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOrderDetails() {
+      try {
+        const res = await fetch(`/api/orders?id=${encodeURIComponent(orderId)}`);
+        const data = await res.json();
+        if (data.success && data.order) {
+          const rawOrder = data.order;
+          
+          const createdDate = new Date(rawOrder.created);
+          const dateStr = createdDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          });
+          const timeStr = createdDate.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+
+          // Price Calculation
+          const totalVal = rawOrder.total?.gross?.amount || 0;
+          const isFreeShipping = totalVal > 40;
+          const shippingVal = isFreeShipping ? 0 : 5;
+          const subtotalVal = Math.max(0, totalVal - shippingVal);
+
+          // Steps Mapping
+          const isCancelled = rawOrder.status === "CANCELED";
+          const isFulfilled = rawOrder.status === "FULFILLED";
+
+          const steps = isCancelled ? [
+            { title: "Order Placed", time: dateStr + ", " + timeStr, completed: true },
+            { title: "Cancelled", time: "Processing Cancel", completed: true, active: true }
+          ] : [
+            { title: "Order Placed", time: dateStr + ", " + timeStr, completed: true },
+            { title: "Payment Confirmed", time: dateStr + ", " + timeStr, completed: true },
+            { title: "Processed & Packed", completed: isFulfilled || !isCancelled },
+            { title: "In Transit", completed: isFulfilled, active: !isFulfilled },
+            { title: "Delivered", completed: isFulfilled, active: isFulfilled }
+          ];
+
+          // Address Mapping
+          const addr = rawOrder.shippingAddress || {};
+          const address = {
+            name: `${addr.firstName || "Guest"} ${addr.lastName || "Customer"}`,
+            street: addr.streetAddress1 || "No street address provided",
+            cityState: `${addr.city || ""}, ${addr.postalCode || ""}, ${addr.country?.code || ""}`,
+            phone: addr.phone || "N/A"
+          };
+
+          // Items Mapping
+          const items = (rawOrder.lines || []).map((line: any): OrderItem => ({
+            name: line.productName || "Product Item",
+            price: `$${(line.unitPrice?.gross?.amount || 0).toFixed(2)}`,
+            image: line.thumbnail?.url || "/images/placeholder.png",
+            size: line.variantName || "Standard",
+            quantity: line.quantity || 1
+          }));
+
+          setOrder({
+            id: rawOrder.id,
+            date: dateStr,
+            time: timeStr,
+            status: rawOrder.status,
+            subtotal: `$${subtotalVal.toFixed(2)}`,
+            shipping: isFreeShipping ? "Free" : `$${shippingVal.toFixed(2)}`,
+            total: `$${totalVal.toFixed(2)}`,
+            address,
+            payment: {
+              type: "Razorpay Secure",
+              cardNo: "Net Banking / Wallet"
+            },
+            steps,
+            items
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOrderDetails();
+  }, [orderId]);
+
+  if (loading) {
+    return (
+      <MobileContainer>
+        <header className={styles.header}>
+          <button onClick={() => router.back()} className={styles.iconButton} aria-label="Go back">
+            <ChevronLeft size={22} strokeWidth={1.8} className={styles.icon} />
+          </button>
+          <h2 className={styles.title}>Order Details</h2>
+        </header>
+        <main className={styles.mainContent}>
+          <div className={styles.emptyState}>
+            <p className={styles.emptyText}>Loading order details...</p>
+          </div>
+        </main>
+        <BottomNav />
+      </MobileContainer>
+    );
+  }
+
+  if (!order) {
+    return (
+      <MobileContainer>
+        <header className={styles.header}>
+          <button onClick={() => router.back()} className={styles.iconButton} aria-label="Go back">
+            <ChevronLeft size={22} strokeWidth={1.8} className={styles.icon} />
+          </button>
+          <h2 className={styles.title}>Order Details</h2>
+        </header>
+        <main className={styles.mainContent}>
+          <div className={styles.emptyState}>
+            <p className={styles.emptyText}>Order not found.</p>
+          </div>
+        </main>
+        <BottomNav />
+      </MobileContainer>
+    );
+  }
 
   return (
     <MobileContainer>
@@ -194,7 +208,7 @@ export default function OrderDetailsPage({ params }: PageProps) {
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3 className={styles.cardTitle}>Tracking Status</h3>
-                <span className={styles.orderTag}>{order.id}</span>
+                <span className={styles.orderTag}>#{order.id.replace(/[^0-9]/g, "").substring(0, 8) || order.id}</span>
               </div>
 
               <div className={styles.stepper}>
@@ -245,13 +259,33 @@ export default function OrderDetailsPage({ params }: PageProps) {
                 {order.items.map((item, idx) => (
                   <div key={idx} className={styles.itemRow}>
                     <div className={styles.itemImageWrapper}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={50}
-                        height={50}
-                        className={styles.itemImage}
-                      />
+                      {item.image && item.image !== "!" ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={50}
+                          height={50}
+                          className={styles.itemImage}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: 50,
+                            height: 50,
+                            backgroundColor: "var(--input-bg)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            fontSize: "14px",
+                            fontWeight: 700,
+                            color: "var(--text-secondary)",
+                            borderRadius: "8px",
+                            userSelect: "none"
+                          }}
+                        >
+                          !
+                        </div>
+                      )}
                     </div>
                     <div className={styles.itemMeta}>
                       <h4 className={styles.itemName}>{item.name}</h4>

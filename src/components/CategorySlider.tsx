@@ -4,38 +4,39 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./CategorySlider.module.css";
 
-interface Category {
-  id: string;
-  name: string;
-  emoji: string;
-}
+import { SaleorCategory } from "@/services/saleor";
 
-const CATEGORIES: Category[] = [
-  { id: "honey", name: "Honey", emoji: "🍯" },
-  { id: "dry-fish", name: "Dry Fish", emoji: "🐟" },
-  { id: "meat", name: "Dry Meat", emoji: "🥩" },
-  { id: "traditional", name: "Traditional", emoji: "🌿" },
+const DEFAULT_CATEGORIES: SaleorCategory[] = [
+  { id: "honey", name: "Honey", slug: "honey", emoji: "🍯" },
+  { id: "dry-fish", name: "Dry Fish", slug: "dry-fish", emoji: "🐟" },
+  { id: "meat", name: "Dry Meat", slug: "meat", emoji: "🥩" },
+  { id: "traditional", name: "Traditional", slug: "traditional", emoji: "🌿" },
 ];
 
-export default function CategorySlider() {
-  const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("honey");
+interface CategorySliderProps {
+  categories?: SaleorCategory[];
+}
 
-  const handleCategoryClick = (id: string) => {
+export default function CategorySlider({ categories }: CategorySliderProps) {
+  const router = useRouter();
+  const displayCategories = categories && categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+  const [activeCategory, setActiveCategory] = useState(displayCategories[0]?.id || "");
+
+  const handleCategoryClick = (id: string, slug?: string) => {
     setActiveCategory(id);
-    router.push("/products");
+    router.push(`/products?category=${encodeURIComponent(slug || id)}`);
   };
 
   return (
     <div className={styles.sliderContainer}>
       <div className={`${styles.slider} no-scrollbar`}>
-        {CATEGORIES.map((category) => {
+        {displayCategories.map((category) => {
           const isActive = category.id === activeCategory;
           return (
             <button
               key={category.id}
               className={`${styles.pill} ${isActive ? styles.activePill : styles.inactivePill}`}
-              onClick={() => handleCategoryClick(category.id)}
+              onClick={() => handleCategoryClick(category.id, category.slug)}
             >
               <span className={styles.emojiCircle}>
                 {category.emoji}

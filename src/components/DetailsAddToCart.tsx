@@ -1,19 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Plus, Minus } from "lucide-react";
 import styles from "./DetailsAddToCart.module.css";
+import { useCart } from "@/context/CartContext";
 
-export default function DetailsAddToCart() {
-  const [quantity, setQuantity] = useState(0);
+interface DetailsAddToCartProps {
+  id: string;
+  variantId: string;
+  name: string;
+  price: string;
+  numericPrice: number;
+  image: string;
+  size: string;
+  color: string;
+}
+
+export default function DetailsAddToCart({
+  id,
+  variantId,
+  name,
+  price,
+  numericPrice,
+  image,
+  size,
+  color,
+}: DetailsAddToCartProps) {
+  const { cartItems, addToCart, updateQuantity } = useCart();
+
+  // Find if this specific variant is already in the cart
+  const cartItem = cartItems.find((i) => i.id === variantId);
+  const quantity = cartItem ? cartItem.quantity : 0;
 
   const handleIncrement = () => {
-    setQuantity(quantity + 1);
+    if (quantity === 0) {
+      addToCart({
+        id: variantId,
+        variantId,
+        productId: id,
+        name,
+        price,
+        numericPrice,
+        image: image || "!",
+        size,
+        color,
+      });
+    } else {
+      updateQuantity(variantId, size, color, quantity + 1);
+    }
   };
 
   const handleDecrement = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1);
+      updateQuantity(variantId, size, color, quantity - 1);
     }
   };
 

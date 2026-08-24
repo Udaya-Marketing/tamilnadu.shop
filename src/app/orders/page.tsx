@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MobileContainer from "@/components/MobileContainer";
@@ -26,70 +26,75 @@ interface OrderData {
   actionText: string;
 }
 
-const ORDERS: OrderData[] = [
-  {
-    id: "ORD-984310",
-    date: "July 10, 2026",
-    status: "In Transit",
-    total: "$23.00",
-    statusMessage: "Departed sorting facility, in transit to hub",
-    actionText: "Track Order",
-    items: [
-      {
-        name: "Home box honey",
-        price: "$15.00",
-        image: "/images/home_box_honey.png",
-        size: "500g",
-        quantity: 1,
-      },
-      {
-        name: "old tamarind",
-        price: "$8.00",
-        image: "/images/old_tamarind.png",
-        size: "500g",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: "ORD-982405",
-    date: "July 02, 2026",
-    status: "Delivered",
-    total: "$40.00",
-    actionText: "Write Review",
-    items: [
-      {
-        name: "Uppukandam beef",
-        price: "$40.00",
-        image: "/images/uppukandam_beef.png",
-        size: "250g",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: "ORD-979920",
-    date: "June 15, 2026",
-    status: "Cancelled",
-    total: "$6.00",
-    actionText: "Contact Support",
-    items: [
-      {
-        name: "seemai nellikai",
-        price: "$6.00",
-        image: "/images/seemai_nellikai.png",
-        size: "250g",
-        quantity: 1,
-      },
-    ],
-  },
-];
-
 export default function MyOrdersPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"Active" | "Completed" | "Cancelled">("Active");
+  const [orders, setOrders] = useState<OrderData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredOrders = ORDERS.filter((order) => {
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await fetch("/api/orders");
+        const data = await res.json();
+        if (data.success && data.orders) {
+          // Map Saleor orders list into storefront OrderData interface
+          const mappedOrders = data.orders.map((order: any): OrderData => {
+            const dateStr = new Date(order.created).toLocaleDateString("en-US", {
+              month: "long",
+              day: "2-digit",
+              year: "numeric",
+            });
+
+            // Map Saleor statuses: UNFULFILLED -> In Transit, FULFILLED -> Delivered, CANCELED -> Cancelled
+            let status: "In Transit" | "Delivered" | "Cancelled" = "In Transit";
+            let statusMessage = "Order is processing and preparing for shipping";
+            let actionText = "Track Order";
+
+            if (order.status === "FULFILLED") {
+              status = "Delivered";
+              statusMessage = "Order successfully delivered to destination";
+              actionText = "Write Review";
+            } else if (order.status === "CANCELED") {
+              status = "Cancelled";
+              statusMessage = "Order was cancelled";
+              actionText = "Contact Support";
+            }
+
+            const items = (order.lines || []).map((line: any): OrderItem => ({
+              name: line.productName || "Product Item",
+              price: `$${(line.unitPrice?.gross?.amount || 0).toFixed(2)}`,
+              image: line.thumbnail?.url || "/images/placeholder.png",
+              size: line.variantName || "Standard",
+              quantity: line.quantity || 1
+            }));
+
+            const total = `$${(order.total?.gross?.amount || 0).toFixed(2)}`;
+
+            return {
+              id: order.id,
+              date: dateStr,
+              status,
+              total,
+              items,
+              statusMessage,
+              actionText
+            };
+          });
+
+          setOrders(mappedOrders);
+        }
+      } catch (error) {
+        console.error("Failed to load orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOrders();
+  }, []);
+
+  const filteredOrders = orders.filter((order) => {
     if (activeTab === "Active") return order.status === "In Transit";
     if (activeTab === "Completed") return order.status === "Delivered";
     return order.status === "Cancelled";
@@ -138,7 +143,11 @@ export default function MyOrdersPage() {
         </div>
 
         {/* Orders Card Stack */}
-        {filteredOrders.length > 0 ? (
+        {loading ? (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyText}>Loading orders...</p>
+          </div>
+        ) : filteredOrders.length > 0 ? (
           <div className={styles.ordersList}>
             {filteredOrders.map((order) => (
               <div
@@ -151,7 +160,7 @@ export default function MyOrdersPage() {
                 {/* Header Information */}
                 <div className={styles.cardHeader}>
                   <div className={styles.headerLeft}>
-                    <span className={styles.orderId}>{order.id}</span>
+                    <span className={styles.orderId}>#{order.id.replace(/[^0-9]/g, "").substring(0, 8) || order.id}</span>
                     <span className={styles.orderDate}>{order.date}</span>
                   </div>
                   <span className={`${styles.statusBadge} ${getStatusClass(order.status)}`}>
@@ -164,13 +173,33 @@ export default function MyOrdersPage() {
                   {order.items.map((item, idx) => (
                     <div key={idx} className={styles.itemRow}>
                       <div className={styles.itemImageWrapper}>
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={50}
-                          height={50}
-                          className={styles.itemImage}
-                        />
+                        {item.image && item.image !== "!" ? (
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={50}
+                            height={50}
+                            className={styles.itemImage}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: 50,
+                              height: 50,
+                              backgroundColor: "var(--input-bg)",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              fontSize: "14px",
+                              fontWeight: 700,
+                              color: "var(--text-secondary)",
+                              borderRadius: "8px",
+                              userSelect: "none"
+                            }}
+                          >
+                            !
+                          </div>
+                        )}
                       </div>
                       <div className={styles.itemMeta}>
                         <h4 className={styles.itemName}>{item.name}</h4>
@@ -201,7 +230,7 @@ export default function MyOrdersPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      alert(`${order.actionText} clicked for ${order.id}`);
+                      alert(`${order.actionText} clicked for order.`);
                     }}
                     className={styles.actionBtn}
                     type="button"

@@ -35,14 +35,18 @@
     gap: 32px;
     padding: 0 32px 16px 32px;
     margin-bottom: 12px;
+    min-width: 0;
   }
   
   .heroLeft {
     justify-content: space-between;
+    min-width: 0;
   }
 
   .desktopCategories {
     display: block;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .mobileCategories {

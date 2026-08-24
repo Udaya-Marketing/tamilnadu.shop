@@ -6,9 +6,13 @@ import Banner from "@/components/Banner";
 import CategorySlider from "@/components/CategorySlider";
 import ProductGrid from "@/components/ProductGrid";
 import BottomNav from "@/components/BottomNav";
+import { getProducts, getCategories } from "@/services/saleor";
 import styles from "./page.module.css";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts(12);
+  const categories = await getCategories(20);
+
   return (
     <MobileContainer>
       <Header />
@@ -19,7 +23,7 @@ export default function Home() {
             <Title />
             <SearchBar />
             <div className={styles.desktopCategories}>
-              <CategorySlider />
+              <CategorySlider categories={categories} />
             </div>
           </div>
           <div className={styles.heroRight}>
@@ -29,11 +33,11 @@ export default function Home() {
         
         {/* Horizontal Category Slider for Mobile/Tablet flow */}
         <div className={styles.mobileCategories}>
-          <CategorySlider />
+          <CategorySlider categories={categories} />
         </div>
 
         {/* Responsive Product Grid */}
-        <ProductGrid />
+        <ProductGrid products={products} />
       </main>
       <BottomNav />
     </MobileContainer>

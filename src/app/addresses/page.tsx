@@ -16,35 +16,61 @@ export default function ShippingAddressesPage() {
     deleteAddress,
     setAddressAsDefault,
   } = useCart();
-  
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [name, setName] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [street, setStreet] = useState("");
-  const [cityState, setCityState] = useState("");
-  const [country, setCountry] = useState("UK");
+  const [streetAddress2, setStreetAddress2] = useState("");
+  const [city, setCity] = useState("");
+  const [cityArea, setCityArea] = useState("");
+  const [stateVal, setStateVal] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("India");
   const [phone, setPhone] = useState("");
   const [isDefaultForm, setIsDefaultForm] = useState(false);
 
   const handleAddAddress = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !street.trim() || !cityState.trim() || !phone.trim()) {
-      alert("Please fill in all address parameters.");
+    if (
+      !name.trim() ||
+      !companyName.trim() ||
+      !street.trim() ||
+      !streetAddress2.trim() ||
+      !city.trim() ||
+      !cityArea.trim() ||
+      !stateVal.trim() ||
+      !postalCode.trim() ||
+      !phone.trim()
+    ) {
+      alert("Please fill in all required address parameters.");
       return;
     }
 
     addAddress({
       name,
+      companyName,
       street,
-      cityState,
+      streetAddress2,
+      cityState: `${city}, ${stateVal} ${postalCode}`,
+      city,
+      cityArea,
+      state: stateVal,
+      postalCode,
       country,
       phone,
       isDefault: isDefaultForm,
     });
 
     setName("");
+    setCompanyName("");
     setStreet("");
-    setCityState("");
-    setCountry("UK");
+    setStreetAddress2("");
+    setCity("");
+    setCityArea("");
+    setStateVal("");
+    setPostalCode("");
+    setCountry("India");
     setPhone("");
     setIsDefaultForm(false);
     setShowAddForm(false);
@@ -73,7 +99,7 @@ export default function ShippingAddressesPage() {
 
       <main className={styles.mainContent}>
         <div className={styles.responsiveWrapper}>
-          
+
           {/* List of saved addresses */}
           <div className={styles.listCol}>
             <h3 className={styles.sectionTitle}>Saved Addresses</h3>
@@ -119,7 +145,7 @@ export default function ShippingAddressesPage() {
                   </div>
                 </div>
               ))}
-              
+
               {addresses.length === 0 && (
                 <div className={styles.emptyState}>
                   <p>No shipping addresses saved.</p>
@@ -134,7 +160,7 @@ export default function ShippingAddressesPage() {
             <div className={styles.formCard}>
               <h3 className={styles.formTitle}>Add New Address</h3>
               <form onSubmit={handleAddAddress} className={styles.addressForm}>
-                
+
                 <div className={styles.inputGroup}>
                   <label className={styles.inputLabel}>Name / Label</label>
                   <input
@@ -148,7 +174,19 @@ export default function ShippingAddressesPage() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>Street Address</label>
+                  <label className={styles.inputLabel}>Company Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Acme Corp"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    className={styles.textInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Street Address 1</label>
                   <input
                     type="text"
                     placeholder="e.g. 124 Baker Street"
@@ -160,12 +198,60 @@ export default function ShippingAddressesPage() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>City & State / Postcode</label>
+                  <label className={styles.inputLabel}>Street Address 2 (Apartment, suite, unit, etc.)</label>
                   <input
                     type="text"
-                    placeholder="e.g. London, NW1 6XE"
-                    value={cityState}
-                    onChange={(e) => setCityState(e.target.value)}
+                    placeholder="e.g. Flat 4B"
+                    value={streetAddress2}
+                    onChange={(e) => setStreetAddress2(e.target.value)}
+                    className={styles.textInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>City</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. London or Bangalore"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className={styles.textInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>City Area / Locality</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Westminster or Indiranagar"
+                    value={cityArea}
+                    onChange={(e) => setCityArea(e.target.value)}
+                    className={styles.textInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>State / Province / Region</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Greater London or Karnataka"
+                    value={stateVal}
+                    onChange={(e) => setStateVal(e.target.value)}
+                    className={styles.textInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Postcode / ZIP</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. NW1 6XE or 560008"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
                     className={styles.textInput}
                     required
                   />
@@ -175,7 +261,7 @@ export default function ShippingAddressesPage() {
                   <label className={styles.inputLabel}>Country</label>
                   <input
                     type="text"
-                    placeholder="e.g. UK"
+                    placeholder="e.g. UK or India"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className={styles.textInput}

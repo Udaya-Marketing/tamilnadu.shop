@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Heart, ShoppingCart, Plus, Minus } from "lucide-react";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: Product;
@@ -15,19 +16,42 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const [liked, setLiked] = useState(product.isLiked || false);
-  const [quantity, setQuantity] = useState(0);
+  const { cartItems, addToCart, updateQuantity } = useCart();
+
+  const defaultVariant = product.variants?.[0];
+  const variantId = defaultVariant?.id || product.id;
+  const size = defaultVariant?.sizes?.[0] || product.sizes?.[0] || "Standard";
+  const color = defaultVariant?.colors?.[0] || product.colors?.[0] || "";
+
+  // Get current quantity of the default variant from the cart
+  const cartItem = cartItems.find((i) => i.id === variantId);
+  const quantity = cartItem ? cartItem.quantity : 0;
 
   const handleIncrement = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    setQuantity(quantity + 1);
+    if (quantity === 0) {
+      addToCart({
+        id: variantId,
+        variantId,
+        productId: product.id,
+        name: product.name,
+        price: defaultVariant?.price || product.price,
+        numericPrice: defaultVariant?.numericPrice || product.numericPrice,
+        image: defaultVariant?.image || product.image || "",
+        size,
+        color
+      });
+    } else {
+      updateQuantity(variantId, size, color, quantity + 1);
+    }
   };
 
   const handleDecrement = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (quantity > 0) {
-      setQuantity(quantity - 1);
+      updateQuantity(variantId, size, color, quantity - 1);
     }
   };
 
@@ -57,17 +81,21 @@ export default function ProductCard({ product }: ProductCardProps) {
         onClick={handleNavigate}
       >
         <div className={styles.imageWrapper}>
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={180}
-            height={190}
-            className={styles.productImage}
-            style={{
-              viewTransitionName: `product-image-${product.id}`,
-            } as React.CSSProperties}
-            priority
-          />
+          {product.image ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={180}
+              height={190}
+              className={styles.productImage}
+              style={{
+                viewTransitionName: `product-image-${product.id}`,
+              } as React.CSSProperties}
+              priority
+            />
+          ) : (
+            <div className={styles.imagePlaceholder}>!</div>
+          )}
         </div>
         <div className={styles.details}>
           <div className={styles.info}>

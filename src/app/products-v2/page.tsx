@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MobileContainer from "@/components/MobileContainer";
 import ProductDetailsHeader from "@/components/ProductDetailsHeader";
 import ProductCard from "@/components/ProductCard";
 import BottomNav from "@/components/BottomNav";
-import { PRODUCTS } from "@/data/products";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Product } from "@/data/products";
+import { Search, SlidersHorizontal, X, Loader2 } from "lucide-react";
 import styles from "./page.module.css";
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   { id: "all", name: "All", emoji: "🛍️" },
   { id: "honey", name: "Honey", emoji: "🍯" },
   { id: "dry-fish", name: "Dry Fish", emoji: "🐟" },
@@ -32,8 +32,51 @@ export default function ProductsV2Page() {
   const [selectedSize, setSelectedSize] = useState("All");
   const [selectedPriceRange, setSelectedPriceRange] = useState("all");
   const [showFilterPanel, setShowFilterPanel] = useState(true);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
 
-  const filteredProducts = PRODUCTS.filter((product) => {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("category");
+      if (cat) {
+        setSelectedCategory(cat);
+      }
+    }
+
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products client-side:", err);
+        setLoading(false);
+      });
+
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const mapped = data.map((c) => ({
+            id: c.slug,
+            name: c.name,
+            emoji: c.emoji
+          }));
+          setCategories([
+            { id: "all", name: "All", emoji: "🛍️" },
+            ...mapped
+          ]);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch categories:", err));
+  }, []);
+
+  const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
     const matchesSize = selectedSize === "All" || product.sizes.includes(selectedSize);
@@ -90,7 +133,7 @@ export default function ProductsV2Page() {
             <div className={styles.filterSection}>
               <h4 className={styles.filterLabel}>Category</h4>
               <div className={`${styles.horizontalSlider} no-scrollbar`}>
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
@@ -155,7 +198,11 @@ export default function ProductsV2Page() {
         </div>
 
         {/* Dynamic products list grid */}
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className={styles.loadingState} style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+            <Loader2 className="animate-spin" size={32} style={{ color: "var(--primary-color, #e5a63c)" }} />
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <div className={styles.grid}>
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

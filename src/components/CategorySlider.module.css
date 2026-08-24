@@ -1,5 +1,7 @@
 .sliderContainer {
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   padding: 8px 0 16px 0;
   background-color: var(--background);
 }

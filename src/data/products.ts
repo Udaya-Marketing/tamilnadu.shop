@@ -1,3 +1,13 @@
+export interface ProductVariant {
+  id: string;
+  name: string;
+  price: string;
+  numericPrice: number;
+  sizes: string[];
+  colors: string[];
+  image?: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -13,6 +23,8 @@ export interface Product {
   sizes: string[];
   limited?: boolean;
   category?: string;
+  images?: string[];
+  variants?: ProductVariant[];
 }
 
 export const PRODUCTS: Product[] = [

@@ -143,15 +143,16 @@
   position: relative;
   display: flex;
   height: 140px;
-  background-color: var(--card-bg);
+  background: linear-gradient(135deg, var(--card-bg) 0%, #f7f7f4 100%);
   border-radius: 24px;
-  border: 1px solid rgba(var(--black-rgb), 0.02);
+  border: 1px solid rgba(var(--black-rgb), 0.03);
   box-shadow: 0 4px 14px rgba(var(--black-rgb), 0.02);
   overflow: hidden;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .ticketCardActive {
+  background: linear-gradient(135deg, rgba(var(--success-rgb), 0.01) 0%, rgba(var(--success-rgb), 0.05) 100%);
   border-color: var(--success);
   box-shadow: 0 6px 20px rgba(var(--success-rgb), 0.06);
 }
@@ -187,13 +188,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, var(--card-bg) 0%, #e3e3e0 100%);
+  background: linear-gradient(135deg, #f2f2ee 0%, #e5e5e1 100%);
   flex-shrink: 0;
   transition: background 0.25s ease;
 }
 
 .valueSectionActive {
-  background: linear-gradient(135deg, rgba(var(--success-rgb), 0.03) 0%, rgba(var(--success-rgb), 0.15) 100%);
+  background: linear-gradient(135deg, rgba(var(--success-rgb), 0.08) 0%, rgba(var(--success-rgb), 0.16) 100%);
 }
 
 .valueText {
@@ -344,13 +345,18 @@
 
 @media (prefers-color-scheme: dark) {
   .ticketCard {
+    background: linear-gradient(135deg, var(--card-bg) 0%, #171720 100%);
     border-color: rgba(var(--white-rgb), 0.03);
   }
+  .ticketCardActive {
+    background: linear-gradient(135deg, rgba(var(--success-rgb), 0.01) 0%, rgba(var(--success-rgb), 0.06) 100%);
+    border-color: var(--success);
+  }
   .valueSection {
-    background: linear-gradient(135deg, var(--card-bg) 0%, #15151c 100%);
+    background: linear-gradient(135deg, #24242e 0%, #15151c 100%);
   }
   .valueSectionActive {
-    background: linear-gradient(135deg, rgba(var(--success-rgb), 0.05) 0%, rgba(var(--success-rgb), 0.2) 100%);
+    background: linear-gradient(135deg, rgba(var(--success-rgb), 0.06) 0%, rgba(var(--success-rgb), 0.18) 100%);
   }
   .codeBox {
     background-color: var(--background);

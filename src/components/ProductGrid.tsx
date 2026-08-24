@@ -3,13 +3,18 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 import styles from "./ProductGrid.module.css";
-import { PRODUCTS } from "@/data/products";
+import { PRODUCTS, Product } from "@/data/products";
 
-export default function ProductGrid() {
+interface ProductGridProps {
+  products?: Product[];
+}
+
+export default function ProductGrid({ products }: ProductGridProps) {
+  const displayProducts = products !== undefined ? products : PRODUCTS;
   return (
     <div className={styles.gridContainer}>
       <div className={styles.grid}>
-        {PRODUCTS.map((product) => (
+        {displayProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

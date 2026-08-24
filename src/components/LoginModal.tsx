@@ -10,11 +10,13 @@ export default function LoginModal() {
   const { isLoginModalOpen, setLoginModalOpen, login } = useCart();
   const [step, setStep] = useState<1 | 2>(1);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [countdown, setCountdown] = useState(59);
-  
+
   const otpRefs = [
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -32,7 +34,7 @@ export default function LoginModal() {
 
   if (!isLoginModalOpen) return null;
 
-  const handleSendOtp = (e: React.FormEvent) => {
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     const cleaned = phoneNumber.replace(/\D/g, "");
@@ -40,8 +42,26 @@ export default function LoginModal() {
       setError("Please enter a valid 10-digit phone number");
       return;
     }
-    setStep(2);
-    setCountdown(59);
+
+    try {
+      const formattedPhone = `+91${cleaned}`;
+      const response = await fetch("/api/auth/otp/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: formattedPhone }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.error || "Failed to request verification code");
+        return;
+      }
+      setStep(2);
+      setCountdown(59);
+    } catch (err) {
+      setError("Failed to connect to authentication service.");
+    }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -52,7 +72,7 @@ export default function LoginModal() {
     setOtp(updated);
 
     // Autofocus next input
-    if (newVal && index < 3) {
+    if (newVal && index < 5) {
       otpRefs[index + 1].current?.focus();
     }
   };
@@ -63,42 +83,67 @@ export default function LoginModal() {
     }
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     const code = otp.join("");
-    if (code.length < 4) {
-      setError("Please enter all 4 digits of the OTP");
+    if (code.length < 6) {
+      setError("Please enter all 6 digits of the OTP");
       return;
     }
-    // Mock validation: accept "1234" (standard testing code)
-    if (code !== "1234") {
-      setError("Invalid OTP. Hint: Use 1234 for testing.");
-      return;
+
+    try {
+      const cleaned = phoneNumber.replace(/\D/g, "");
+      const formattedPhone = `+91${cleaned}`;
+      const response = await fetch("/api/auth/otp/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: formattedPhone, otp: code }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.error || "Verification failed");
+        return;
+      }
+
+      // Fetch profile details immediately to hydrate the state completely!
+      try {
+        const meRes = await fetch("/api/auth/me");
+        const meData = meRes.ok ? await meRes.json() : null;
+        if (meData) {
+          login(meData.phone, meData.email, meData.name, meData.ordersCount, meData.addresses);
+        } else {
+          login(formattedPhone, data.user?.email);
+        }
+      } catch {
+        login(formattedPhone, data.user?.email);
+      }
+
+      setLoginModalOpen(false);
+      resetState();
+    } catch (err) {
+      setError("Authentication service connection failed.");
     }
-    
-    // Login successfully
-    login(`+1 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`);
-    setLoginModalOpen(false);
-    resetState();
   };
 
   const resetState = () => {
     setStep(1);
     setPhoneNumber("");
-    setOtp(["", "", "", ""]);
+    setOtp(["", "", "", "", "", ""]);
     setError("");
   };
 
   return (
     <div className={styles.overlay} onClick={() => setLoginModalOpen(false)}>
-      <div 
-        className={styles.modalCard} 
+      <div
+        className={styles.modalCard}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
-        <button 
-          className={styles.closeBtn} 
+        <button
+          className={styles.closeBtn}
           onClick={() => setLoginModalOpen(false)}
           aria-label="Close"
         >
@@ -120,7 +165,7 @@ export default function LoginModal() {
         {step === 1 ? (
           <form onSubmit={handleSendOtp} className={styles.form}>
             <div className={styles.inputContainer}>
-              <span className={styles.countryCode}>+1</span>
+              <span className={styles.countryCode}>+91</span>
               <div className={styles.inputWrapper}>
                 <Phone size={18} className={styles.inputIcon} />
                 <input
@@ -139,9 +184,9 @@ export default function LoginModal() {
               <span>Get Verification Code</span>
               <ChevronRight size={16} />
             </button>
-            
+
             <p className={styles.testHint}>
-              Hint: Use any 10-digit number & code <strong>1234</strong>
+              Hint: Enter any 10-digit number & check backend console logs for OTP code.
             </p>
           </form>
         ) : (
@@ -168,12 +213,31 @@ export default function LoginModal() {
               {countdown > 0 ? (
                 <span className={styles.timerText}>Resend code in {countdown}s</span>
               ) : (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className={styles.resendBtn}
-                  onClick={() => {
-                    setCountdown(59);
-                    setError("Mock OTP code resent to phone.");
+                  onClick={async () => {
+                    setError("");
+                    const cleaned = phoneNumber.replace(/\D/g, "");
+                    const formattedPhone = `+91${cleaned}`;
+                    try {
+                      const response = await fetch("/api/auth/otp/request", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ phone: formattedPhone }),
+                      });
+                      if (response.ok) {
+                        setCountdown(59);
+                        setError("Verification code resent to your phone.");
+                      } else {
+                        const data = await response.json();
+                        setError(data.error || "Failed to resend code");
+                      }
+                    } catch (err) {
+                      setError("Could not connect to service.");
+                    }
                   }}
                 >
                   Resend verification code
@@ -186,8 +250,8 @@ export default function LoginModal() {
               <span>Verify & Sign In</span>
             </button>
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.backBtn}
               onClick={() => setStep(1)}
             >
@@ -199,16 +263,16 @@ export default function LoginModal() {
         {/* Policy Links */}
         <div className={styles.policyLinks}>
           By continuing, you agree to our{" "}
-          <Link 
-            href="/terms" 
+          <Link
+            href="/terms"
             className={styles.policyLink}
             onClick={() => setLoginModalOpen(false)}
           >
             Terms & Conditions
           </Link>{" "}
           and{" "}
-          <Link 
-            href="/privacy" 
+          <Link
+            href="/privacy"
             className={styles.policyLink}
             onClick={() => setLoginModalOpen(false)}
           >

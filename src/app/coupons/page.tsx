@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import MobileContainer from "@/components/MobileContainer";
 import BottomNav from "@/components/BottomNav";
@@ -16,35 +16,19 @@ interface Coupon {
   expiry: string;
 }
 
-const COUPONS_DATA: Coupon[] = [
-  {
-    code: "SAVE10",
-    value: "10%",
-    title: "Sitewide Discount",
-    description: "Get 10% off your entire order. Valid on all traditional foods, honey, and dry fish.",
-    expiry: "Expires July 20, 2026",
-  },
-  {
-    code: "FREESHIP",
-    value: "FREE",
-    title: "Free Standard Shipping",
-    description: "Free standard home delivery on orders exceeding total purchase values of $100.",
-    expiry: "Expires August 01, 2026",
-  },
-  {
-    code: "WELCOME5",
-    value: "$5",
-    title: "Welcome Coupon",
-    description: "Special sign-up gift of $5.00 off for first-time orders across Gubera collections.",
-    expiry: "No Expiration Date",
-  },
-];
-
 export default function CouponsPage() {
   const router = useRouter();
   const { appliedCoupon, applyCoupon, removeCoupon } = useCart();
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [manualCode, setManualCode] = useState("");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/coupons")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setCoupons(data))
+      .catch((err) => console.error("Failed to fetch coupons:", err));
+  }, []);
 
   const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -54,14 +38,13 @@ export default function CouponsPage() {
     }, 2000);
   };
 
-  const handleManualApply = (e: React.FormEvent) => {
+  const handleManualApply = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!manualCode.trim()) return;
-    if (applyCoupon(manualCode)) {
+    const success = await applyCoupon(manualCode);
+    if (success) {
       alert(`Success! Coupon ${manualCode.toUpperCase()} applied.`);
       setManualCode("");
-    } else {
-      alert("Invalid code! Try 'SAVE10', 'WELCOME5', or 'FREESHIP'");
     }
   };
 
@@ -124,7 +107,7 @@ export default function CouponsPage() {
 
         {/* Coupons Ticket Cards List */}
         <div className={styles.couponsList}>
-          {COUPONS_DATA.map((coupon) => {
+          {coupons.map((coupon) => {
             const isApplied = appliedCoupon === coupon.code;
             return (
               <div key={coupon.code} className={`${styles.ticketCard} ${isApplied ? styles.ticketCardActive : ""}`}>
@@ -164,7 +147,13 @@ export default function CouponsPage() {
                       </button>
 
                       <button
-                        onClick={() => isApplied ? removeCoupon() : applyCoupon(coupon.code)}
+                        onClick={async () => {
+                          if (isApplied) {
+                            await removeCoupon();
+                          } else {
+                            await applyCoupon(coupon.code);
+                          }
+                        }}
                         className={`${styles.applyBtn} ${isApplied ? styles.applyBtnActive : styles.applyBtnInactive}`}
                         type="button"
                       >

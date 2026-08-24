@@ -16,6 +16,7 @@ export default function CartSidebar() {
     updateQuantity,
     removeFromCart,
     subtotal,
+    shippingCost,
     appliedCoupon,
     discountAmount,
     applyCoupon,
@@ -30,15 +31,13 @@ export default function CartSidebar() {
 
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId) || addresses.find((a) => a.isDefault) || addresses[0];
 
-  const shippingCost = cartItems.length > 0 ? (appliedCoupon === "FREESHIP" ? 0 : 15.21) : 0;
   const totalAmount = Math.max(0, subtotal - discountAmount + shippingCost);
 
-  const handleApplyPromo = (e: React.FormEvent) => {
+  const handleApplyPromo = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (applyCoupon(promoCode)) {
+    const success = await applyCoupon(promoCode);
+    if (success) {
       alert(`Promo code ${promoCode.toUpperCase()} applied!`);
-    } else {
-      alert("Invalid code! Try 'SAVE10', 'WELCOME5', or 'FREESHIP'");
     }
   };
 
@@ -73,13 +72,33 @@ export default function CartSidebar() {
                   <div key={`${item.id}-${item.size}-${item.color}`} className={styles.cartItem}>
                     {/* Image with dismiss badge */}
                     <div className={styles.imageContainer}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={90}
-                        height={100}
-                        className={styles.itemImage}
-                      />
+                      {item.image && item.image !== "!" ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={90}
+                          height={100}
+                          className={styles.itemImage}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: 90,
+                            height: 100,
+                            backgroundColor: "var(--input-bg)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            fontSize: "24px",
+                            fontWeight: 700,
+                            color: "var(--text-secondary)",
+                            borderRadius: "var(--radius-md)",
+                            userSelect: "none"
+                          }}
+                        >
+                          !
+                        </div>
+                      )}
                       <button
                         onClick={() => removeFromCart(item.id, item.size, item.color)}
                         className={styles.removeButton}
