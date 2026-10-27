@@ -7,8 +7,8 @@ export default function Title() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
-        Discover attractive<br />
-        discount sales
+        Refurbished laptops<br />
+        ready for a new life
       </h1>
     </div>
   );

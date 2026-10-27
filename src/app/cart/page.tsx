@@ -155,7 +155,7 @@ export default function MobileCartPage() {
         key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "Gubera Foods Store",
+        name: "Tamilnadu.shop",
         description: "Secure Order Checkout",
         order_id: orderData.orderId,
         handler: async function (response: any) {

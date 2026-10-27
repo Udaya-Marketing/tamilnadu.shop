@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Heart, ShoppingCart, Plus, Minus } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
@@ -14,63 +13,34 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const router = useRouter();
-  const [liked, setLiked] = useState(product.isLiked || false);
-  const { cartItems, addToCart, updateQuantity } = useCart();
+  const { addToCart, wishlistIds, toggleWishlist } = useCart();
+  const liked = wishlistIds.includes(product.id);
 
   const defaultVariant = product.variants?.[0];
   const variantId = defaultVariant?.id || product.id;
   const size = defaultVariant?.sizes?.[0] || product.sizes?.[0] || "Standard";
   const color = defaultVariant?.colors?.[0] || product.colors?.[0] || "";
 
-  // Get current quantity of the default variant from the cart
-  const cartItem = cartItems.find((i) => i.id === variantId);
-  const quantity = cartItem ? cartItem.quantity : 0;
-
-  const handleIncrement = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    if (quantity === 0) {
-      addToCart({
-        id: variantId,
-        variantId,
-        productId: product.id,
-        name: product.name,
-        price: defaultVariant?.price || product.price,
-        numericPrice: defaultVariant?.numericPrice || product.numericPrice,
-        image: defaultVariant?.image || product.image || "",
-        size,
-        color
-      });
-    } else {
-      updateQuantity(variantId, size, color, quantity + 1);
-    }
-  };
-
-  const handleDecrement = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (quantity > 0) {
-      updateQuantity(variantId, size, color, quantity - 1);
-    }
+    addToCart({
+      id: variantId,
+      variantId,
+      productId: product.id,
+      name: product.name,
+      price: defaultVariant?.price || product.price,
+      numericPrice: defaultVariant?.numericPrice || product.numericPrice,
+      image: defaultVariant?.image || product.image || "",
+      size,
+      color
+    });
   };
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    setLiked(!liked);
-  };
-
-  const handleNavigate = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const doc = document as any;
-    if (doc.startViewTransition) {
-      doc.startViewTransition(() => {
-        router.push(`/product/${product.id}`);
-      });
-    } else {
-      router.push(`/product/${product.id}`);
-    }
+    toggleWishlist(product.id);
   };
 
   return (
@@ -78,7 +48,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link 
         href={`/product/${product.id}`} 
         className={styles.cardLink}
-        onClick={handleNavigate}
       >
         <div className={styles.imageWrapper}>
           {product.image ? (
@@ -111,6 +80,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         className={`${styles.likeButton} ${liked ? styles.liked : ""}`}
         onClick={handleLike}
         aria-label={liked ? "Unlike product" : "Like product"}
+        aria-pressed={liked}
+        type="button"
       >
         <Heart
           size={14}
@@ -123,44 +94,15 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Floating Cart Action */}
       <div className={styles.cartActionWrapper}>
-        <div className={`${styles.cartWrapper} ${quantity > 0 ? styles.expanded : ""}`}>
+        <div className={styles.cartWrapper}>
           <button
             className={styles.cartButton}
-            onClick={handleIncrement}
+            onClick={handleAddToCart}
             aria-label="Add to cart"
-            style={{
-              opacity: quantity === 0 ? 1 : 0,
-              pointerEvents: quantity === 0 ? "auto" : "none",
-              transform: quantity === 0 ? "scale(1)" : "scale(0.7)",
-            }}
+            type="button"
           >
             <ShoppingCart size={15} className={styles.cartIcon} strokeWidth={2.5} />
           </button>
-          
-          <div
-            className={styles.quantitySelector}
-            style={{
-              opacity: quantity > 0 ? 1 : 0,
-              pointerEvents: quantity > 0 ? "auto" : "none",
-              transform: quantity > 0 ? "scale(1)" : "scale(0.8)",
-            }}
-          >
-            <button
-              className={styles.qtyButton}
-              onClick={handleDecrement}
-              aria-label="Decrease quantity"
-            >
-              <Minus size={11} strokeWidth={2.5} />
-            </button>
-            <span className={styles.quantityText}>{quantity}</span>
-            <button
-              className={styles.qtyButton}
-              onClick={handleIncrement}
-              aria-label="Increase quantity"
-            >
-              <Plus size={11} strokeWidth={2.5} />
-            </button>
-          </div>
         </div>
       </div>
     </div>

@@ -3,28 +3,20 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./CategorySlider.module.css";
-
-import { SaleorCategory } from "@/services/saleor";
-
-const DEFAULT_CATEGORIES: SaleorCategory[] = [
-  { id: "honey", name: "Honey", slug: "honey", emoji: "🍯" },
-  { id: "dry-fish", name: "Dry Fish", slug: "dry-fish", emoji: "🐟" },
-  { id: "meat", name: "Dry Meat", slug: "meat", emoji: "🥩" },
-  { id: "traditional", name: "Traditional", slug: "traditional", emoji: "🌿" },
-];
+import { CATEGORIES, CatalogCategory } from "@/data/products";
 
 interface CategorySliderProps {
-  categories?: SaleorCategory[];
+  categories?: CatalogCategory[];
 }
 
 export default function CategorySlider({ categories }: CategorySliderProps) {
   const router = useRouter();
-  const displayCategories = categories && categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+  const displayCategories = categories && categories.length > 0 ? categories : CATEGORIES;
   const [activeCategory, setActiveCategory] = useState(displayCategories[0]?.id || "");
 
   const handleCategoryClick = (id: string, slug?: string) => {
     setActiveCategory(id);
-    router.push(`/products?category=${encodeURIComponent(slug || id)}`);
+    router.push(`/categories?category=${encodeURIComponent(slug || id)}`);
   };
 
   return (

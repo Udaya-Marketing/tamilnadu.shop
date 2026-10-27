@@ -28,6 +28,7 @@ export default function BottomNav() {
     if (pathname === "/") return "home";
     if (pathname?.startsWith("/categories")) return "categories";
     if (pathname === "/cart") return "cart";
+    if (pathname?.startsWith("/wishlist")) return "favorites";
     if (
       pathname?.startsWith("/profile") ||
       pathname?.startsWith("/orders") ||
@@ -102,11 +103,11 @@ export default function BottomNav() {
         {/* Favorites Tab */}
         <button
           className={`${styles.navItem} ${activeTab === "favorites" ? styles.activeItem : styles.inactiveItem}`}
-          onClick={() => router.push("/products-v2")}
-          aria-label="Explore"
+          onClick={() => router.push("/wishlist")}
+          aria-label="Wishlist"
         >
           <Heart size={18} strokeWidth={2.5} />
-          <span className={styles.navText}>Explore</span>
+          <span className={styles.navText}>Wishlist</span>
         </button>
 
         {/* Profile Tab */}

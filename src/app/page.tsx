@@ -6,13 +6,14 @@ import Banner from "@/components/Banner";
 import CategorySlider from "@/components/CategorySlider";
 import ProductGrid from "@/components/ProductGrid";
 import BottomNav from "@/components/BottomNav";
-import { getProducts, getCategories } from "@/services/saleor";
+import DemoCatalogNotice from "@/components/DemoCatalogNotice";
+import FindMyLaptop from "@/components/FindMyLaptop";
+import FeaturedPicks from "@/components/FeaturedPicks";
+import NewArrivals from "@/components/NewArrivals";
+import { CATEGORIES, PRODUCTS } from "@/data/products";
 import styles from "./page.module.css";
 
-export default async function Home() {
-  const products = await getProducts(12);
-  const categories = await getCategories(20);
-
+export default function Home() {
   return (
     <MobileContainer>
       <Header />
@@ -23,7 +24,7 @@ export default async function Home() {
             <Title />
             <SearchBar />
             <div className={styles.desktopCategories}>
-              <CategorySlider categories={categories} />
+              <CategorySlider categories={CATEGORIES} />
             </div>
           </div>
           <div className={styles.heroRight}>
@@ -33,11 +34,16 @@ export default async function Home() {
         
         {/* Horizontal Category Slider for Mobile/Tablet flow */}
         <div className={styles.mobileCategories}>
-          <CategorySlider categories={categories} />
+          <CategorySlider categories={CATEGORIES} />
         </div>
 
+        <DemoCatalogNotice />
+        <FindMyLaptop />
+        <NewArrivals />
+        <FeaturedPicks />
+
         {/* Responsive Product Grid */}
-        <ProductGrid products={products} />
+        <ProductGrid products={PRODUCTS.slice(0, 12)} />
       </main>
       <BottomNav />
     </MobileContainer>

@@ -618,7 +618,7 @@ export async function getUserProfile(token: string) {
     name,
     email: me.email,
     phone,
-    avatar: me.avatar?.url || "/images/profile.png",
+    avatar: me.avatar?.url || "/images/profile-placeholder.svg",
     ordersCount: me.orders?.totalCount || 0,
     addresses: me.addresses || []
   };
@@ -1346,4 +1346,3 @@ export async function getOrderById(token: string | null | undefined, orderId: st
   const data = await fetchSaleorGraphQL(query, { id: orderId }, token || undefined);
   return data?.order || null;
 }
-

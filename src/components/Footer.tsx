@@ -10,10 +10,10 @@ export default function Footer() {
       <div className={styles.container}>
         {/* Brand Column */}
         <div className={styles.brandCol}>
-          <div className={styles.logoBadge}>G</div>
-          <h4 className={styles.brandTitle}>Gubera Shop</h4>
+          <div className={styles.logoBadge}>T</div>
+          <h4 className={styles.brandTitle}>Tamilnadu.shop</h4>
           <p className={styles.tagline}>
-            Premium organic honey, dry fish varieties, traditional foods and spices.
+            Refurbished laptops from brands you know.
           </p>
         </div>
 
@@ -33,12 +33,12 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/categories-v2" className={styles.link}>
-                Categories V2
+                Laptop categories
               </Link>
             </li>
             <li>
               <Link href="/coupons" className={styles.link}>
-                Promo Tickets
+                Offers
               </Link>
             </li>
           </ul>
@@ -71,21 +71,17 @@ export default function Footer() {
           <span className={styles.colTitle}>Contact Us</span>
           <ul className={styles.contactList}>
             <li>
-              <span className={styles.contactLabel}>Email:</span>
-              <a href="mailto:asha.royden@example.com" className={styles.contactValue}>
-                asha.royden@example.com
-              </a>
+              <span className={styles.contactLabel}>Phone:</span>
+              <span className={styles.contactValue}>+91 9208660866</span>
             </li>
             <li>
-              <span className={styles.contactLabel}>Phone:</span>
-              <a href="tel:+12345678900" className={styles.contactValue}>
-                +1 (234) 567-8900
-              </a>
+              <span className={styles.contactLabel}>Location:</span>
+              <span className={styles.contactValue}>Namakkal,Tamil Nadu</span>
             </li>
             <li>
               <span className={styles.contactLabel}>Store Address:</span>
               <span className={styles.contactValue}>
-                12 Traditional Street, Madurai, Tamil Nadu, India
+                1st Floor, 1/129/19,  Ponnusamy Nagar, Pappinayakkanpatti, Namakkal, Tamil Nadu 637003
               </span>
             </li>
           </ul>
@@ -94,7 +90,7 @@ export default function Footer() {
 
       <div className={styles.bottomRow}>
         <span className={styles.copyright}>
-          © {new Date().getFullYear()} Gubera Shop. All rights reserved. Built for Asha Royden.
+          © {new Date().getFullYear()} Tamilnadu.shop. All rights reserved.
         </span>
       </div>
     </footer>

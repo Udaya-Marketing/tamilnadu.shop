@@ -5,41 +5,22 @@ import MobileContainer from "@/components/MobileContainer";
 import ProductDetailsHeader from "@/components/ProductDetailsHeader";
 import ProductCard from "@/components/ProductCard";
 import BottomNav from "@/components/BottomNav";
-import { Product } from "@/data/products";
-import { Search, Loader2, X } from "lucide-react";
+import DemoCatalogNotice from "@/components/DemoCatalogNotice";
+import { PRODUCTS } from "@/data/products";
+import { Search, X } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function ExploreProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Read category from window search parameters client-side
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const cat = params.get("category");
-      if (cat) {
-        setSelectedCategory(cat);
-      }
-    }
-
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setProducts(data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch products client-side:", err);
-        setLoading(false);
-      });
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category");
+    if (category) setSelectedCategory(category);
   }, []);
 
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = PRODUCTS.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -47,15 +28,17 @@ export default function ExploreProductsPage() {
 
   return (
     <MobileContainer>
-      <ProductDetailsHeader title="Explore Products" />
+      <ProductDetailsHeader title="Refurbished laptops" />
       
       <main className={styles.mainContent}>
+        <DemoCatalogNotice />
+
         {/* Full-width Search Input */}
         <div className={styles.searchContainer}>
           <Search size={20} className={styles.searchIcon} strokeWidth={2} />
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search laptops..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={styles.searchInput}
@@ -104,22 +87,10 @@ export default function ExploreProductsPage() {
           </div>
         )}
 
-        {/* Loading / Product Grid */}
-        {loading ? (
-          <div className={styles.loadingState} style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
-            <Loader2 className="animate-spin" size={32} style={{ color: "var(--primary-color, #e5a63c)" }} />
-          </div>
-        ) : filteredProducts.length > 0 ? (
+        {filteredProducts.length > 0 ? (
           <div className={styles.grid}>
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
-            ))}
-            {/* Visual duplications to match length of layout */}
-            {searchQuery === "" && !selectedCategory && products.slice(3, 4).map((product) => (
-              <ProductCard key={`${product.id}-dup-1`} product={{...product, id: product.id}} />
-            ))}
-            {searchQuery === "" && !selectedCategory && products.slice(3, 4).map((product) => (
-              <ProductCard key={`${product.id}-dup-2`} product={{...product, id: product.id}} />
             ))}
           </div>
         ) : (

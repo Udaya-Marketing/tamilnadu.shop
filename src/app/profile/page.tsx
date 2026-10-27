@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MobileContainer from "@/components/MobileContainer";
 import BottomNav from "@/components/BottomNav";
+import NotificationButton from "@/components/NotificationButton";
 import { useCart } from "@/context/CartContext";
 import {
   ChevronLeft,
-  Bell,
   ChevronRight,
   ShoppingBag,
   MapPin,
@@ -79,9 +79,7 @@ export default function ProfilePage() {
           <ChevronLeft size={22} strokeWidth={1.8} className={styles.icon} />
         </button>
         <h2 className={styles.title}>My Profile</h2>
-        <button className={styles.iconButton} aria-label="Notifications">
-          <Bell size={22} strokeWidth={1.8} className={styles.icon} />
-        </button>
+        <NotificationButton />
       </header>
 
       <main className={styles.mainContent}>

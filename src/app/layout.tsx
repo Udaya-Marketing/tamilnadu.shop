@@ -54,8 +54,8 @@ const fellix = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Gubera Traditional Foods Storefront",
-  description: "Explore premium wild honey, sun-dried fish varieties, uppukandam meats, and organic sweeteners.",
+  title: "Tamilnadu.shop | Refurbished Laptops",
+  description: "Browse sample refurbished laptops from leading brands at Tamilnadu.shop.",
 };
 
 export default function RootLayout({

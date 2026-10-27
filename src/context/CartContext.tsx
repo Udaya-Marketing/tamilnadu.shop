@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useSyncExternalStore } from "react";
+import {
+  getServerWishlistSnapshot,
+  getWishlistSnapshot,
+  subscribeToWishlist,
+  toggleWishlistProduct,
+} from "@/data/wishlist";
 
 export interface CartItem {
   id: string;
@@ -43,6 +49,9 @@ export interface UserProfile {
 
 interface CartContextType {
   cartItems: CartItem[];
+  wishlistIds: string[];
+  wishlistLoaded: boolean;
+  toggleWishlist: (productId: string) => void;
   addToCart: (item: Omit<CartItem, "quantity">) => void;
   removeFromCart: (id: string, size: string, color: string) => void;
   updateQuantity: (id: string, size: string, color: string, quantity: number) => void;
@@ -78,6 +87,12 @@ const INITIAL_CART: CartItem[] = [];
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_CART);
+  const wishlistSnapshot = useSyncExternalStore(
+    subscribeToWishlist,
+    getWishlistSnapshot,
+    getServerWishlistSnapshot
+  );
+  const { ids: wishlistIds, loaded: wishlistLoaded } = wishlistSnapshot;
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   // Auth States
@@ -85,13 +100,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
+  const toggleWishlist = (productId: string) => {
+    toggleWishlistProduct(productId);
+  };
+
   const login = (phone: string, email?: string, name?: string, ordersCount?: number, userAddresses?: any[]) => {
     setIsLoggedIn(true);
     setUser({
       name: name || "Saleor User",
       email: email || "",
       phone: phone,
-      avatar: "/images/profile.png",
+      avatar: "/images/profile-placeholder.svg",
       ordersCount: ordersCount || 0,
     });
     if (userAddresses && userAddresses.length > 0) {
@@ -574,6 +593,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         cartItems,
+        wishlistIds,
+        wishlistLoaded,
+        toggleWishlist,
         addToCart,
         removeFromCart,
         updateQuantity,

@@ -3,8 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ShoppingBag, Bell } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import NotificationButton from "@/components/NotificationButton";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -29,13 +30,19 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
+      <div className={styles.brand}>
+        <div className={styles.logoPlaceholder} aria-label="Brand logo placeholder">
+          Logo
+        </div>
+        <span className={styles.brandName}>Tamilnadu.shop</span>
+      </div>
       <div 
         className={styles.profileContainer} 
         onClick={handleProfileClick}
         style={{ cursor: "pointer" }}
       >
         <Image
-          src={isLoggedIn && user ? user.avatar : "/images/profile.png"}
+          src={isLoggedIn && user ? user.avatar : "/images/profile-placeholder.svg"}
           alt="Profile Avatar"
           width={44}
           height={44}
@@ -53,10 +60,7 @@ export default function Header() {
           <ShoppingBag size={22} strokeWidth={1.8} className={styles.icon} />
           {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
         </button>
-        <button className={styles.iconButton} aria-label="Notifications">
-          <Bell size={22} strokeWidth={1.8} className={styles.icon} />
-          <span className={styles.notificationBadge} />
-        </button>
+        <NotificationButton />
       </div>
     </header>
   );

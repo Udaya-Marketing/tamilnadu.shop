@@ -2,7 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import ProductDetailsHeader from "@/components/ProductDetailsHeader";
 import ProductInteractiveSection from "@/components/ProductInteractiveSection";
-import { getProductById } from "@/services/saleor";
+import { PRODUCTS } from "@/data/products";
 import styles from "./page.module.css";
 
 interface ProductPageProps {
@@ -11,7 +11,7 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = await getProductById(decodeURIComponent(id));
+  const product = PRODUCTS.find((item) => item.id === decodeURIComponent(id));
 
   if (!product) {
     notFound();

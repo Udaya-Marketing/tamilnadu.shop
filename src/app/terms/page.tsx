@@ -35,7 +35,7 @@ export default function TermsPage() {
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>1. Acceptance of Terms</h3>
             <p className={styles.sectionText}>
-              By accessing and placing an order with Gubera Shop, you confirm that you are in agreement with and bound by the terms of service contained in the Terms and Conditions outlined below. These terms apply to the entire website and any email or other type of communication between you and Gubera Shop.
+              By accessing and placing an order with Tamilnadu.shop, you confirm that you are in agreement with and bound by the terms of service contained in the Terms and Conditions outlined below. These terms apply to the entire website and any email or other type of communication between you and Tamilnadu.shop.
             </p>
           </section>
 

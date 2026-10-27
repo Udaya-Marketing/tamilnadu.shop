@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(233, 233, 231, 0.85);
+  background-color: rgba(12, 12, 12, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(233, 233, 231, 0.4);
@@ -88,7 +88,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    background-color: rgba(233, 233, 231, 0.85);
+    background-color: rgba(246, 241, 241, 0.85);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(233, 233, 231, 0.4);
@@ -138,7 +138,7 @@
 /* Forced Bottom Navigation Styles (all screens) */
 .forceBottom {
   position: fixed !important;
-  bottom: 24px !important;
+  bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   top: auto !important;
   left: 0 !important;
   right: 0 !important;
@@ -158,46 +158,53 @@
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  background-color: rgba(233, 233, 231, 0.85) !important;
+  background-color: rgba(255, 255, 255, 0.96) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(233, 233, 231, 0.4) !important;
+  border: 1px solid rgba(18, 18, 18, 0.12) !important;
   border-radius: 40px !important;
-  padding: 8px 12px !important;
+  padding: 8px 10px !important;
   width: 100% !important;
-  max-width: 480px !important;
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  max-width: 520px !important;
+  box-shadow:
+    0 12px 32px rgba(18, 18, 18, 0.16),
+    0 3px 10px rgba(18, 18, 18, 0.08) !important;
   pointer-events: auto !important;
   gap: 4px !important;
 }
 
 .forceBottom .navItem {
   display: flex !important;
+  flex: 1 1 0 !important;
+  flex-direction: column !important;
   justify-content: center !important;
   align-items: center !important;
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50% !important;
+  gap: 4px !important;
+  width: auto !important;
+  height: 56px !important;
+  border-radius: 24px !important;
   padding: 0 !important;
-  color: var(--text-secondary) !important;
+  color: #55565b !important;
   background-color: transparent !important;
 }
 
 .forceBottom .navItem:hover {
   color: var(--text-primary) !important;
-  background-color: rgba(0, 0, 0, 0.03) !important;
+  background-color: rgba(18, 18, 18, 0.06) !important;
 }
 
 .forceBottom .activeItem {
   background-color: var(--foreground) !important;
   color: var(--background) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(18, 18, 18, 0.2) !important;
 }
 
 .forceBottom .navText {
-  display: none !important;
+  display: block !important;
+  font-size: 10px !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.01em !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -233,8 +240,12 @@
   }
 
   .forceBottomBar {
-    background-color: rgba(28, 28, 30, 0.7) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    background-color: rgba(28, 28, 30, 0.94) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+  }
+
+  .forceBottom .navItem {
+    color: #c5c5ca !important;
   }
 
   .forceBottom .activeItem {
@@ -244,6 +255,6 @@
   }
 
   .forceBottom .navItem:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
   }
 }

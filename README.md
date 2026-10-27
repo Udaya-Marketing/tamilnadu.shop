@@ -20,6 +20,10 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Demo catalog
+
+The storefront currently displays sample refurbished-laptop listings from `src/data/products.ts` and does not need Saleor to browse the catalog. The product names, specifications, prices, and images are mock data; live inventory, sign-in, and checkout still require their configured backend services.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

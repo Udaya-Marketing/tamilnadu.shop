@@ -143,12 +143,6 @@
   margin-left: 8px;
 }
 
-.expanded {
-  width: 86px;
-  border-radius: 20px;
-  background-color: var(--foreground);
-}
-
 .cartButton {
   position: absolute;
   top: 0;
@@ -175,64 +169,10 @@
   color: var(--text-primary);
 }
 
-.quantitySelector {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4px;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.qtyButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.qtyButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.qtyButton:active {
-  transform: scale(0.85);
-}
-
-.quantityText {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  min-width: 12px;
-  text-align: center;
-}
-
 @media (prefers-color-scheme: dark) {
   .likeButton {
     background-color: #1c1c24;
     border-color: rgba(255, 255, 255, 0.03);
-  }
-  .expanded {
-    background-color: var(--foreground);
-  }
-  .quantityText {
-    color: var(--background);
-  }
-  .qtyButton {
-    background: rgba(0, 0, 0, 0.12);
-    color: var(--text-primary);
-  }
-  .qtyButton:hover {
-    background-color: rgba(0, 0, 0, 0.2);
   }
 }
 

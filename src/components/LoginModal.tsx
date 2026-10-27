@@ -152,8 +152,8 @@ export default function LoginModal() {
 
         {/* Title and Logo */}
         <div className={styles.header}>
-          <div className={styles.logoBadge}>G</div>
-          <h3 className={styles.title}>Gubera Shop</h3>
+          <div className={styles.logoBadge}>T</div>
+          <h3 className={styles.title}>Tamilnadu.shop</h3>
           <p className={styles.subtitle}>
             {step === 1 ? "Enter your phone number to sign in or register" : "Verify code sent to your phone"}
           </p>

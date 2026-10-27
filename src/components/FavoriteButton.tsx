@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Heart } from "lucide-react";
 import styles from "./FavoriteButton.module.css";
+import { useCart } from "@/context/CartContext";
 
-export default function FavoriteButton({ isLiked = false }: { isLiked?: boolean }) {
-  const [liked, setLiked] = useState(isLiked);
+export default function FavoriteButton({ productId }: { productId: string }) {
+  const { wishlistIds, toggleWishlist } = useCart();
+  const liked = wishlistIds.includes(productId);
   
   return (
     <button
       className={`${styles.button} ${liked ? styles.liked : ""}`}
-      onClick={() => setLiked(!liked)}
-      aria-label="Like product"
+      onClick={() => toggleWishlist(productId)}
+      aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+      aria-pressed={liked}
       type="button"
     >
       <Heart

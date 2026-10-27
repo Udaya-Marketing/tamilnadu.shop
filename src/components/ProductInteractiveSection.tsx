@@ -119,7 +119,7 @@ export default function ProductInteractiveSection({ product }: ProductInteractiv
           {product.limited && (
             <span className={layoutStyles.limitedBadge}>LIMITED</span>
           )}
-          <FavoriteButton isLiked={product.isLiked} />
+          <FavoriteButton productId={product.id} />
         </div>
 
         {/* Thumbnail Image Gallery */}
@@ -187,7 +187,7 @@ export default function ProductInteractiveSection({ product }: ProductInteractiv
           {/* Colors Selector */}
           {product.colors && product.colors.length > 0 && (
             <div className={layoutStyles.optionSection}>
-              <h4 className={layoutStyles.optionLabel}>Color</h4>
+              <h4 className={layoutStyles.optionLabel}>Finish</h4>
               <div className={styles.colorsRow}>
                 {product.colors.map((color) => {
                   const isActive = selectedColor === color;
@@ -213,7 +213,7 @@ export default function ProductInteractiveSection({ product }: ProductInteractiv
           {/* Sizes Selector */}
           {product.sizes && product.sizes.length > 0 && (
             <div className={layoutStyles.optionSection}>
-              <h4 className={layoutStyles.optionLabel}>Weight / Option</h4>
+              <h4 className={layoutStyles.optionLabel}>Configuration</h4>
               <div className={styles.sizesRow}>
                 {product.sizes.map((size) => {
                   const isActive = selectedSize === size;

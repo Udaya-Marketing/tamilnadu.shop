@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MobileContainer from "@/components/MobileContainer";
 import ProductDetailsHeader from "@/components/ProductDetailsHeader";
 import BottomNav from "@/components/BottomNav";
-import { ArrowUpRight, Loader2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { CATEGORIES, PRODUCTS } from "@/data/products";
 import styles from "./page.module.css";
 
 interface CollectionData {
@@ -19,40 +20,17 @@ interface CollectionData {
 
 export default function CategoriesV2Page() {
   const router = useRouter();
-  const [collections, setCollections] = useState<CollectionData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/categories").then((res) => res.json()),
-      fetch("/api/products").then((res) => res.json())
-    ])
-      .then(([categoriesData, productsData]) => {
-        if (Array.isArray(categoriesData) && Array.isArray(productsData)) {
-          const GRID_CLASSES = [styles.heroCard, styles.tallCard, styles.squareCard1, styles.tallCard2];
-          
-          const mapped: CollectionData[] = categoriesData.map((c, index) => {
-            const categoryProducts = productsData.filter((p) => p.category === c.slug);
-            const count = categoryProducts.length;
-            const image = categoryProducts[0]?.image || ""; // first product image or empty
-            
-            return {
-              id: c.slug,
-              name: c.name,
-              count: count === 1 ? "1 Item" : `${count} Items`,
-              image,
-              gridClass: GRID_CLASSES[index % GRID_CLASSES.length]
-            };
-          });
-          setCollections(mapped);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch collections client-side:", err);
-        setLoading(false);
-      });
-  }, []);
+  const gridClasses = [styles.heroCard, styles.tallCard, styles.squareCard1, styles.tallCard2];
+  const collections: CollectionData[] = CATEGORIES.map((category, index) => {
+    const categoryProducts = PRODUCTS.filter((product) => product.category === category.slug);
+    return {
+      id: category.slug,
+      name: category.name,
+      count: categoryProducts.length === 1 ? "1 Item" : `${categoryProducts.length} Items`,
+      image: categoryProducts[0]?.image || "",
+      gridClass: gridClasses[index % gridClasses.length],
+    };
+  });
 
   const handleSelect = (id: string) => {
     router.push(`/products?category=${encodeURIComponent(id)}`);
@@ -63,11 +41,7 @@ export default function CategoriesV2Page() {
       <ProductDetailsHeader title="Collections" />
 
       <main className={styles.mainContent}>
-        {loading ? (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
-            <Loader2 className="animate-spin" size={32} style={{ color: "var(--primary-color, #e5a63c)" }} />
-          </div>
-        ) : collections.length > 0 ? (
+        {collections.length > 0 ? (
           <div className={styles.masonryGrid}>
             {collections.map((col) => (
               <button

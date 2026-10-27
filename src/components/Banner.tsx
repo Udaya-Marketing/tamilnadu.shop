@@ -9,20 +9,20 @@ export default function Banner() {
     <div className={styles.banner}>
       <div className={styles.content}>
         <h2 className={styles.title}>
-          Organic Palm Jaggery,<br />
-          pure <span className={styles.highlight}>Karupatti</span> sweetness
+          Trusted tech,<br />
+          smarter <span className={styles.highlight}>prices</span>
         </h2>
-        <Link href="/products-v2" className={styles.shopButton}>
+        <Link href="/products" className={styles.shopButton}>
           <span>Shop now</span>
           <ArrowRight size={14} className={styles.arrowIcon} strokeWidth={2.5} />
         </Link>
       </div>
       <div className={styles.imageContainer}>
         <Image
-          src="/images/karupatti.png"
-          alt="Karupatti Palm Jaggery Promo"
-          width={150}
-          height={150}
+          src="/images/laptop_sleek.png"
+          alt="Refurbished laptop"
+          fill
+          sizes="(max-width: 767px) 40vw, (max-width: 1023px) 35vw, 100vw"
           className={styles.hoodieImage}
           priority
         />
