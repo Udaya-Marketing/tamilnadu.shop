@@ -24,6 +24,15 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 The storefront currently displays sample refurbished-laptop listings from `src/data/products.ts` and does not need Saleor to browse the catalog. The product names, specifications, prices, and images are mock data; live inventory, sign-in, and checkout still require their configured backend services.
 
+## Razorpay checkout
+
+1. Copy `.env.example` to `.env.local`.
+2. Set `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` to the keys from your Razorpay Dashboard. Use test-mode keys while developing.
+3. If the Saleor checkout is priced in USD, set `RAZORPAY_USD_TO_INR_RATE` to the USD-to-INR rate you want to charge. INR checkouts are charged directly.
+4. Restart the Next.js server after changing environment variables.
+
+The key secret is only read by server routes. The server creates the Razorpay order from Saleor's checkout total, validates the checkout signature and payment status, and checks the amount before completing the Saleor order. Configure Razorpay to auto-capture payments for this flow.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

@@ -897,16 +897,19 @@ const CHECKOUT_FIELDS = `
   shippingPrice {
     gross {
       amount
+      currency
     }
   }
   subtotalPrice {
     gross {
       amount
+      currency
     }
   }
   totalPrice {
     gross {
       amount
+      currency
     }
   }
   lines {
@@ -958,6 +961,21 @@ export async function getUserCheckout(token: string): Promise<any | null> {
   }
 
   return data.me.checkouts.edges[0].node;
+}
+
+export async function getCheckoutById(
+  token: string | null | undefined,
+  checkoutId: string
+): Promise<any | null> {
+  const query = `
+    query GetCheckoutById($id: ID!) {
+      checkout(id: $id) {
+        ${CHECKOUT_FIELDS}
+      }
+    }
+  `;
+  const data = await fetchSaleorGraphQL(query, { id: checkoutId }, token || undefined);
+  return data?.checkout || null;
 }
 
 export async function createCheckout(token: string | undefined, lines: any[]): Promise<any | null> {

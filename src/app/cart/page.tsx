@@ -15,6 +15,7 @@ export default function MobileCartPage() {
     cartItems,
     updateQuantity,
     removeFromCart,
+    clearCart,
     subtotal,
     shippingCost,
     appliedCoupon,
@@ -109,21 +110,6 @@ export default function MobileCartPage() {
         quantity: item.quantity
       }));
 
-      const resOrder = await fetch("/api/checkout/razorpay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: totalAmount,
-          checkoutId: selectedAddressId || undefined
-        })
-      });
-
-      const orderData = await resOrder.json();
-      if (!orderData.success) {
-        alert("Razorpay payment initialization failed. Please try again.");
-        return;
-      }
-
       // Parse first and last names for shipping address payload
       const firstName = isLoggedIn 
         ? (selectedAddress?.name?.split(" ")[0] || "Customer") 
@@ -150,6 +136,22 @@ export default function MobileCartPage() {
         phone: guestPhone
       };
 
+      const resOrder = await fetch("/api/checkout/razorpay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: !isLoggedIn ? cartItemsPayload : undefined,
+          phone: isLoggedIn ? (selectedAddress?.phone || "0000000000") : guestPhone,
+          address: addressInputObject
+        })
+      });
+
+      const orderData = await resOrder.json();
+      if (!resOrder.ok || !orderData.success) {
+        alert(orderData.error || "Razorpay payment initialization failed. Please try again.");
+        return;
+      }
+
       // 3. Setup Razorpay Checkout parameters
       const options = {
         key: orderData.keyId,
@@ -165,10 +167,7 @@ export default function MobileCartPage() {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                checkoutId: isLoggedIn ? (selectedAddressId || undefined) : undefined,
-                items: !isLoggedIn ? cartItemsPayload : undefined,
-                phone: isLoggedIn ? (selectedAddress?.phone || "0000000000") : guestPhone,
-                address: addressInputObject,
+                checkoutId: orderData.checkoutId,
                 paymentInfo: {
                   razorpayPaymentId: response.razorpay_payment_id,
                   razorpayOrderId: response.razorpay_order_id,
@@ -180,9 +179,7 @@ export default function MobileCartPage() {
             const completeData = await completeRes.json();
             if (completeData.success) {
               alert(`Order placed successfully! Order #${completeData.orderNumber}`);
-              
-              // Clear current local/cookie cart
-              // (Reload or redirecting will auto-fetch clean checkout)
+              clearCart();
               router.push(`/order/${completeData.orderId}`);
             } else {
               alert(`Order placement failed: ${completeData.error || "Internal Error"}`);
@@ -322,7 +319,7 @@ export default function MobileCartPage() {
                 <div className={styles.activeAlertLeft}>
                   <Check size={14} className={styles.activeCheck} strokeWidth={3} />
                   <span className={styles.activeText}>
-                    Coupon <strong>{appliedCoupon}</strong> applied (-${discountAmount.toFixed(2)})
+                    Coupon <strong>{appliedCoupon}</strong> applied (-₹{discountAmount.toFixed(2)})
                   </span>
                 </div>
                 <button
@@ -568,21 +565,21 @@ export default function MobileCartPage() {
             <div className={styles.pricingSummary}>
               <div className={styles.summaryRow}>
                 <span>Sub total:</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               {appliedCoupon && (
                 <div className={styles.summaryRow}>
                   <span>Discount ({appliedCoupon}):</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
+                  <span>-₹{discountAmount.toFixed(2)}</span>
                 </div>
               )}
               <div className={styles.summaryRow}>
                 <span>Shipping:</span>
-                <span>${shippingCost.toFixed(2)}</span>
+                <span>₹{shippingCost.toFixed(2)}</span>
               </div>
               <div className={`${styles.summaryRow} ${styles.totalRow}`}>
                 <span>Total:</span>
-                <span>${totalAmount.toFixed(2)}</span>
+                <span>₹{totalAmount.toFixed(2)}</span>
               </div>
             </div>
 
